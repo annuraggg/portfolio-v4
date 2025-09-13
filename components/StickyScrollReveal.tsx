@@ -131,7 +131,7 @@ export const StickyScroll = ({
                 ease: [0.25, 0.46, 0.45, 0.94],
                 delay: 0.05,
               }}
-              className="text-lg font-extralight mt-5 text-slate-300"
+              className="text-lg font-medium mt-5 text-zinc-400"
             >
               {item.description}
             </motion.p>

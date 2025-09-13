@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import LeftFloatingMenu from "@/components/LeftFloatingMenu";
 import MouseFollower from "@/components/MouseFollower";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,29 +21,49 @@ const zonoPro = localFont({
   // src: "../assets/fonts/ZonaPro-Bold.otf",
   src: [
     {
-      path: "../assets/fonts/zonapro/zonapro-extralight.otf",
-      weight: "200",
-      style: "extralight",
+      path: "../assets/fonts/zonapro/zonapro-hairline.ttf",
+      weight: "100",
+      style: "hairline",
     },
     {
-      path: "../assets/fonts/zonapro/zonapro-light.otf",
+      path: "../assets/fonts/zonapro/zonapro-thin.ttf",
+      weight: "200",
+      style: "thin",
+    },
+    {
+      path: "../assets/fonts/zonapro/zonapro-light.ttf",
       weight: "300",
       style: "light",
     },
     {
-      path: "../assets/fonts/zonapro/zonapro-regular.otf",
+      path: "../assets/fonts/zonapro/zonapro-regular.ttf",
       weight: "400",
       style: "normal",
     },
     {
-      path: "../assets/fonts/zonapro/zonapro-semibold.otf",
-      weight: "600",
+      path: "../assets/fonts/zonapro/zonapro-semibold.ttf",
+      weight: "500",
       style: "semibold",
     },
     {
-      path: "../assets/fonts/zonapro/zonapro-bold.otf",
-      weight: "700",
+      path: "../assets/fonts/zonapro/zonapro-bold.ttf",
+      weight: "600",
       style: "bold",
+    },
+    {
+      path: "../assets/fonts/zonapro/zonapro-extrabold.ttf",
+      weight: "700",
+      style: "extrabold",
+    },
+    {
+      path: "../assets/fonts/zonapro/zonapro-black.ttf",
+      weight: "800",
+      style: "black",
+    },
+    {
+      path: "../assets/fonts/zonapro/zonapro-ultra.ttf",
+      weight: "900",
+      style: "ultra",
     },
   ],
   variable: "--font-zona-pro",
@@ -67,6 +88,7 @@ export default function RootLayout({
         <MouseFollower />
         <LeftFloatingMenu />
         {children}
+        <Footer />
       </body>
     </html>
   );
