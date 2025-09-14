@@ -21,12 +21,12 @@ const Idea = ({ project }: Props) => {
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       <div>
-        <h2 className="text-5xl font-semibold">Project idea</h2>
+        <h2 className="text-5xl font-semibold text-accent">Project idea</h2>
         <p className="mt-7 text-lg">{project.description}</p>
       </div>
 
       <div className="flex gap-20 mt-32">
-        <h2 className="text-5xl font-semibold flex-1">The Problem</h2>
+        <h2 className="text-5xl font-semibold flex-1 text-accent">The Problem</h2>
         <p className="flex-1 text-lg font-semibold text-zinc-300">
           {project.problem}
         </p>
@@ -36,7 +36,7 @@ const Idea = ({ project }: Props) => {
         <p className="flex-1 text-lg font-semibold text-zinc-300">
           {project.solution}
         </p>
-        <h2 className="text-5xl font-semibold flex-1 text-right">
+        <h2 className="text-5xl font-semibold flex-1 text-right  text-accent">
           The Solution
         </h2>
       </div>
