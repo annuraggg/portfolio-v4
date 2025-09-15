@@ -67,7 +67,7 @@ function DirectionHoverButton({
       ref={buttonRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={` px-12 py-4 border border-gray-600 rounded-full text-white font-medium relative overflow-hidden transition-colors duration-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 ${className}`}
+      className={` px-12 py-4 border outline-none border-gray-600 rounded-full text-white font-medium relative overflow-hidden transition-colors duration-300 hover:text-white focus:outline-none  ${className}`}
       {...props}
     >
       <div

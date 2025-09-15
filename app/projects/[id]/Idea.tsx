@@ -14,7 +14,7 @@ const Idea = ({ project }: Props) => {
 
   return (
     <motion.div
-      className="px-64 pt-72 overflow-hidden"
+      className="px-64 pt-72 mt-32 overflow-hidden"
       ref={ref}
       initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
@@ -26,7 +26,7 @@ const Idea = ({ project }: Props) => {
       </div>
 
       <div className="flex gap-20 mt-32">
-        <h2 className="text-5xl font-semibold flex-1 text-accent">The Problem</h2>
+        <h2 className="text-5xl font-semibold text-accent">The Problem</h2>
         <p className="flex-1 text-lg font-semibold text-zinc-300">
           {project.problem}
         </p>
@@ -36,7 +36,7 @@ const Idea = ({ project }: Props) => {
         <p className="flex-1 text-lg font-semibold text-zinc-300">
           {project.solution}
         </p>
-        <h2 className="text-5xl font-semibold flex-1 text-right  text-accent">
+        <h2 className="text-5xl font-semibold text-right text-accent">
           The Solution
         </h2>
       </div>
