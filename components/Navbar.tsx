@@ -12,11 +12,10 @@ const Navbar = () => {
   const textTimer = useRef<NodeJS.Timeout | null>(null);
 
   const navItems = [
-    { name: "About", path: "/about" },
     { name: "Projects", path: "/projects" },
-    { name: "Services", path: "/services" },
     { name: "Contact", path: "/contact" },
-    { name: "Blog", path: "/blog" },
+    { name: "Blog", path: "https://blog.anuragsawant.in" },
+    { name: "Resume", path: "/documents/resume.pdf" },
   ];
 
   useEffect(() => {
@@ -69,7 +68,13 @@ const Navbar = () => {
             showText ? "opacity-0 translate-x-5" : "opacity-100 translate-x-0"
           }`}
         >
-          <Image src="/logo.png" width={100} height={100} alt="Logo" className="ml-5" />
+          <Image
+            src="/logo.png"
+            width={100}
+            height={100}
+            alt="Logo"
+            className="ml-5"
+          />
         </div>
 
         {/* Text (show when showText) */}
