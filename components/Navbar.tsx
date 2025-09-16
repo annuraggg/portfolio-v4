@@ -12,6 +12,7 @@ const Navbar = () => {
   const textTimer = useRef<NodeJS.Timeout | null>(null);
 
   const navItems = [
+    { name: "Home", path: "/" },
     { name: "Projects", path: "/projects" },
     { name: "Contact", path: "/contact" },
     { name: "Blog", path: "https://blog.anuragsawant.in" },

@@ -10,7 +10,7 @@ interface Props {
 
 const Idea = ({ project }: Props) => {
   const ref = useRef(null);
-  const inView = useInView(ref, { amount: 0.2 });
+  const inView = useInView(ref, { amount: 0.1 });
 
   return (
     <motion.div
