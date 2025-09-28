@@ -101,10 +101,8 @@ export const LightRays = forwardRef<HTMLDivElement, LightRaysProps>(
       count = 7,
       color = "rgba(160, 210, 255, 0.2)",
       blur = 36,
-      opacity = 0.65,
       speed = 14,
       length = "70vh",
-      fill = true,
       ...props
     },
     ref

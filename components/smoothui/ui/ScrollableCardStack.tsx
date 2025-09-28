@@ -1,25 +1,26 @@
-"use client"
+"use client";
 
-import { useCallback, useEffect, useRef, useState } from "react"
-import { motion, useMotionValue, useSpring } from "motion/react"
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, useMotionValue } from "motion/react";
 
-import { cn } from "@/lib/utils/cn"
+import { cn } from "@/lib/utils/cn";
+import Image from "next/image";
 
 interface CardItem {
-  id: string
-  name: string
-  handle: string
-  avatar: string
-  video: string
-  href: string
+  id: string;
+  name: string;
+  handle: string;
+  avatar: string;
+  video: string;
+  href: string;
 }
 
 interface ScrollableCardStackProps {
-  items: CardItem[]
-  cardHeight?: number
-  perspective?: number
-  transitionDuration?: number
-  className?: string
+  items: CardItem[];
+  cardHeight?: number;
+  perspective?: number;
+  transitionDuration?: number;
+  className?: string;
 }
 
 const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
@@ -29,129 +30,120 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
   transitionDuration = 180,
   className,
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isDragging, setIsDragging] = useState(false)
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [isScrolling, setIsScrolling] = useState(false)
-  const containerRef = useRef<HTMLDivElement>(null)
-  const scrollY = useMotionValue(0)
-  const lastScrollTime = useRef(0)
-
-  // Improved spring config inspired by the reference code
-  const springConfig = {
-    damping: 20,
-    stiffness: 250,
-    mass: 0.5,
-  }
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [isScrolling, setIsScrolling] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollY = useMotionValue(0);
+  const lastScrollTime = useRef(0);
 
   // Calculate the total number of items
-  const totalItems = items.length
-  const maxIndex = totalItems - 1
+  const totalItems = items.length;
+  const maxIndex = totalItems - 1;
 
-  // Spring-based scroll for smooth animations
-  const springScrollY = useSpring(scrollY, springConfig)
 
   // Constants for visual effects - matching reference code exactly
-  const FRAME_OFFSET = -30
-  const FRAMES_VISIBLE_LENGTH = 3
-  const SNAP_DISTANCE = 50
+  const FRAME_OFFSET = -30;
+  const FRAMES_VISIBLE_LENGTH = 3;
+  const SNAP_DISTANCE = 50;
 
   // Clamp function from reference code - memoized to prevent recreation
   const clamp = useCallback(
     (val: number, [min, max]: [number, number]): number => {
-      return Math.min(Math.max(val, min), max)
+      return Math.min(Math.max(val, min), max);
     },
     []
-  )
+  );
 
   // Controlled scroll function to move exactly one card
   const scrollToCard = useCallback(
     (direction: 1 | -1) => {
-      if (isScrolling) return
+      if (isScrolling) return;
 
-      const now = Date.now()
-      const timeSinceLastScroll = now - lastScrollTime.current
-      const minScrollInterval = 300
+      const now = Date.now();
+      const timeSinceLastScroll = now - lastScrollTime.current;
+      const minScrollInterval = 300;
 
       if (timeSinceLastScroll < minScrollInterval) {
-        return
+        return;
       }
 
-      const newIndex = clamp(currentIndex + direction, [0, maxIndex])
+      const newIndex = clamp(currentIndex + direction, [0, maxIndex]);
 
       if (newIndex !== currentIndex) {
-        lastScrollTime.current = now
-        setIsScrolling(true)
-        setCurrentIndex(newIndex)
-        scrollY.set(newIndex * SNAP_DISTANCE)
+        lastScrollTime.current = now;
+        setIsScrolling(true);
+        setCurrentIndex(newIndex);
+        scrollY.set(newIndex * SNAP_DISTANCE);
 
         setTimeout(() => {
-          setIsScrolling(false)
-        }, transitionDuration + 100)
+          setIsScrolling(false);
+        }, transitionDuration + 100);
       }
     },
     [currentIndex, maxIndex, scrollY, isScrolling, transitionDuration, clamp]
-  )
+  );
 
   // Handle scroll events with improved responsiveness
   const handleScroll = useCallback(
     (deltaY: number) => {
-      if (isDragging || isScrolling) return
+      if (isDragging || isScrolling) return;
 
-      const minScrollThreshold = 20
+      const minScrollThreshold = 20;
       if (Math.abs(deltaY) < minScrollThreshold) {
-        return
+        return;
       }
 
-      const scrollDirection = deltaY > 0 ? 1 : -1
-      scrollToCard(scrollDirection)
+      const scrollDirection = deltaY > 0 ? 1 : -1;
+      scrollToCard(scrollDirection);
     },
     [isDragging, isScrolling, scrollToCard]
-  )
+  );
 
   // Handle wheel events
   const handleWheel = useCallback(
     (e: WheelEvent) => {
-      e.preventDefault()
-      handleScroll(e.deltaY)
+      e.preventDefault();
+      handleScroll(e.deltaY);
     },
     [handleScroll]
-  )
+  );
 
   // Handle keyboard navigation - improved with reference code logic
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (isScrolling) return
+      if (isScrolling) return;
 
       switch (e.key) {
         case "ArrowUp":
         case "ArrowLeft":
-          e.preventDefault()
-          scrollToCard(-1)
-          break
+          e.preventDefault();
+          scrollToCard(-1);
+          break;
         case "ArrowDown":
         case "ArrowRight":
-          e.preventDefault()
-          scrollToCard(1)
-          break
+          e.preventDefault();
+          scrollToCard(1);
+          break;
         case "Home":
-          e.preventDefault()
+          e.preventDefault();
           if (currentIndex !== 0) {
-            setIsScrolling(true)
-            setCurrentIndex(0)
-            scrollY.set(0)
-            setTimeout(() => setIsScrolling(false), transitionDuration + 100)
+            setIsScrolling(true);
+            setCurrentIndex(0);
+            scrollY.set(0);
+            setTimeout(() => setIsScrolling(false), transitionDuration + 100);
           }
-          break
+          break;
         case "End":
-          e.preventDefault()
+          e.preventDefault();
           if (currentIndex !== maxIndex) {
-            setIsScrolling(true)
-            setCurrentIndex(maxIndex)
-            scrollY.set(maxIndex * SNAP_DISTANCE)
-            setTimeout(() => setIsScrolling(false), transitionDuration + 100)
+            setIsScrolling(true);
+            setCurrentIndex(maxIndex);
+            scrollY.set(maxIndex * SNAP_DISTANCE);
+            setTimeout(() => setIsScrolling(false), transitionDuration + 100);
           }
-          break
+          break;
       }
     },
     [
@@ -162,89 +154,88 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
       scrollToCard,
       transitionDuration,
     ]
-  )
+  );
 
   // Handle touch events for mobile
-  const touchStartY = useRef(0)
-  const touchStartIndex = useRef(0)
-  const touchStartTime = useRef(0)
-  const touchMoved = useRef(false)
+  const touchStartY = useRef(0);
+  const touchStartIndex = useRef(0);
+  const touchStartTime = useRef(0);
+  const touchMoved = useRef(false);
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
-      touchStartY.current = e.touches[0].clientY
-      touchStartIndex.current = currentIndex
-      touchStartTime.current = Date.now()
-      touchMoved.current = false
-      setIsDragging(true)
+      touchStartY.current = e.touches[0].clientY;
+      touchStartIndex.current = currentIndex;
+      touchStartTime.current = Date.now();
+      touchMoved.current = false;
+      setIsDragging(true);
     },
     [currentIndex]
-  )
+  );
 
   const handleTouchMove = useCallback(
     (e: React.TouchEvent) => {
-      if (!isDragging || isScrolling) return
+      if (!isDragging || isScrolling) return;
 
-      const touchY = e.touches[0].clientY
-      const deltaY = touchStartY.current - touchY
-      const scrollThreshold = 100
+      const touchY = e.touches[0].clientY;
+      const deltaY = touchStartY.current - touchY;
+      const scrollThreshold = 100;
 
       if (Math.abs(deltaY) > scrollThreshold && !touchMoved.current) {
-        const scrollDirection = deltaY > 0 ? 1 : -1
-        scrollToCard(scrollDirection)
-        touchMoved.current = true
+        const scrollDirection = deltaY > 0 ? 1 : -1;
+        scrollToCard(scrollDirection);
+        touchMoved.current = true;
       }
     },
     [isDragging, isScrolling, scrollToCard]
-  )
+  );
 
   const handleTouchEnd = useCallback(() => {
-    setIsDragging(false)
-    touchMoved.current = false
-  }, [])
+    setIsDragging(false);
+    touchMoved.current = false;
+  }, []);
 
   // Set up event listeners
   useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
+    const container = containerRef.current;
+    if (!container) return;
 
-    container.addEventListener("wheel", handleWheel, { passive: false })
+    container.addEventListener("wheel", handleWheel, { passive: false });
 
     return () => {
-      container.removeEventListener("wheel", handleWheel)
-    }
-  }, [handleWheel])
+      container.removeEventListener("wheel", handleWheel);
+    };
+  }, [handleWheel]);
 
   // Snap to current index when not dragging
   useEffect(() => {
     if (!isDragging) {
-      scrollY.set(currentIndex * SNAP_DISTANCE)
+      scrollY.set(currentIndex * SNAP_DISTANCE);
     }
-  }, [currentIndex, isDragging, scrollY])
+  }, [currentIndex, isDragging, scrollY]);
 
   // Calculate transform for each card based on the reference code
   const getCardTransform = useCallback(
     (index: number) => {
-      const offsetIndex = index - currentIndex
-      const absOffsetIndex = Math.abs(offsetIndex)
+      const offsetIndex = index - currentIndex;
 
       // Apply blur effect for cards behind the current one - matching reference exactly
-      const blur = currentIndex > index ? 2 : 0
+      const blur = currentIndex > index ? 2 : 0;
 
       // Opacity based on distance - improved logic from reference
-      const opacity = currentIndex > index ? 0 : 1
+      const opacity = currentIndex > index ? 0 : 1;
 
       // Scale with improved calculation inspired by reference - using clamp function
-      const scale = clamp(1 - offsetIndex * 0.08, [0.08, 2])
+      const scale = clamp(1 - offsetIndex * 0.08, [0.08, 2]);
 
       // Vertical offset with improved calculation - matching reference exactly
       const y = clamp(offsetIndex * FRAME_OFFSET, [
         FRAME_OFFSET * FRAMES_VISIBLE_LENGTH,
         Infinity,
-      ])
+      ]);
 
       // Z-index for proper layering - matching reference pattern
-      const zIndex = items.length - index
+      const zIndex = items.length - index;
 
       return {
         y,
@@ -252,10 +243,11 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
         opacity,
         blur,
         zIndex,
-      }
+      };
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentIndex, items.length, clamp]
-  )
+  );
 
   return (
     <section
@@ -276,9 +268,9 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
       aria-label="Scrollable card stack"
     >
       {items.map((item, i) => {
-        const transform = getCardTransform(i)
-        const isActive = i === currentIndex
-        const isHovered = hoveredIndex === i
+        const transform = getCardTransform(i);
+        const isActive = i === currentIndex;
+        const isHovered = hoveredIndex === i;
 
         return (
           <motion.div
@@ -348,10 +340,12 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
               {/* Video Container - takes remaining space */}
               <div className="relative w-full flex-1 overflow-hidden">
                 {/* Background blur image */}
-                <img
+                <Image
                   aria-hidden="true"
                   alt=""
                   decoding="async"
+                  height={100}
+                  width={100}
                   src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSIjZjNmNGY2Ii8+PC9zdmc+"
                   className="absolute inset-0 h-full w-full object-cover text-transparent"
                   style={{
@@ -383,7 +377,7 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
                 rel="noopener noreferrer"
                 aria-label={`View ${item.name}'s profile`}
               >
-                <img
+                <Image
                   className="mr-1 h-5 w-5 overflow-hidden rounded-full"
                   alt={`${item.name}'s avatar`}
                   width={20}
@@ -402,7 +396,7 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
               </a>
             </div>
           </motion.div>
-        )
+        );
       })}
 
       {/* Navigation indicators */}
@@ -418,13 +412,13 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
               type="button"
               onClick={() => {
                 if (i !== currentIndex && !isScrolling) {
-                  setIsScrolling(true)
-                  setCurrentIndex(i)
-                  scrollY.set(i * SNAP_DISTANCE)
+                  setIsScrolling(true);
+                  setCurrentIndex(i);
+                  scrollY.set(i * SNAP_DISTANCE);
                   setTimeout(
                     () => setIsScrolling(false),
                     transitionDuration + 100
-                  )
+                  );
                 }
               }}
               className={cn(
@@ -445,16 +439,18 @@ const ScrollableCardStack: React.FC<ScrollableCardStackProps> = ({
               aria-selected={i === currentIndex}
               aria-label={`Go to card ${i + 1} of ${items.length}`}
             />
-          )
+          );
         })}
       </div>
 
       {/* Instructions for screen readers */}
       <div className="sr-only" aria-live="polite">
-        {`Card ${currentIndex + 1} of ${items.length} selected. Use arrow keys to navigate one card at a time, or click the dots below.`}
+        {`Card ${currentIndex + 1} of ${
+          items.length
+        } selected. Use arrow keys to navigate one card at a time, or click the dots below.`}
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default ScrollableCardStack
+export default ScrollableCardStack;
