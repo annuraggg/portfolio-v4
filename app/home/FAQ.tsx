@@ -87,7 +87,7 @@ const FAQ = () => {
                 />
                 <h2 className="lg:text-5xl font-bold flex flex-col">
                   <span className="mr-3">Frequently</span>
-                  <span className="text-accent mr-3">Asked</span>
+                  <span className="text-primary mr-3">Asked</span>
                   <span>Questions</span>
                 </h2>
               </div>
@@ -105,15 +105,15 @@ const FAQ = () => {
                   transition={{ duration: 0.6, delay: index * 0.1 }}
                   className="group"
                 >
-                  <div className="bg-card  rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 hover:border-accent/30">
+                  <div className="bg-card  rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 hover:border-accent/50">
                     <motion.button
-                      className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-accent/5 transition-colors duration-200"
+                      className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-accent/50 transition-colors duration-200"
                       onClick={() => toggleItem(index)}
                       whileHover={{ scale: 1.002 }}
                       whileTap={{ scale: 0.998 }}
                     >
                       <div className="flex items-center gap-4">
-                        <h3 className="text-2xl font-semibold text-foreground pr-4 group-hover:text-accent transition-colors duration-200">
+                        <h3 className="text-2xl font-semibold text-foreground pr-4 group-hover:text-primary transition-colors duration-200">
                           {item.question}
                         </h3>
                       </div>

@@ -1,5 +1,5 @@
-import BrowserMockup from "@/components/BrowserMockup";
 import DirectionAwareButton from "@/components/DirectionAwareButton";
+import { Safari } from "@/components/ui/safari";
 import { Project } from "@/data/projects";
 import Link from "next/link";
 import React from "react";
@@ -21,7 +21,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
       </div>
 
       <div className="w-[50vw] h-full">
-        <BrowserMockup imageUrl={project.cover!} url={project.links?.demo} />
+        <Safari url={project.links?.demo} imageSrc={project.cover} />
       </div>
     </div>
   );

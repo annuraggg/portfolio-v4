@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
@@ -25,12 +25,6 @@ const About = () => {
             </h2>
             <div>
               <p>
-                With each line of code, I shape my perspective into digital
-                reality, creating a unique and dynamic online presence. In the
-                world of bits and pixels, I am the storyteller, weaving
-                narratives through the language of the web.
-              </p>
-              <p className="mt-10">
                 In July 2022, I completed my Diploma in Information Technology.
                 From a young age, I have been captivated by the world of coding
                 and have spent the past years honing my skills in web

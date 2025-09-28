@@ -1,6 +1,11 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { useMotionValueEvent, useScroll, motion } from "motion/react";
+import {
+  useMotionValueEvent,
+  useScroll,
+  motion,
+  useInView,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 
@@ -21,19 +26,26 @@ export const StickyScroll = ({
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const ref = useRef<HTMLDivElement>(null);
+
   const { scrollYProgress } = useScroll({
     container: ref,
     offset: ["start start", "end start"],
   });
 
+  // ✅ check if the whole component is visible
+  const inView = useInView(ref, {
+    amount: "all", // waits until fully visible
+  });
+
   const cardLength = content.length;
 
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (!inView) return; // freeze updates until fully in view
+
     const p = Number.isFinite(latest) ? latest : 0;
     setScrollProgress(p);
 
-    // Adjusted threshold to account for bigger gaps
-    const threshold = 0.15; // Reduced threshold since we have bigger gaps
+    const threshold = 0.15; // smaller threshold for big gaps
     const adjustedProgress = Math.max(0, p - threshold / cardLength);
 
     const cardsBreakpoints = content.map((_, i) => i / cardLength);
@@ -50,15 +62,14 @@ export const StickyScroll = ({
 
   const clamp = (v: number, a = 0, b = 1) => Math.max(a, Math.min(b, v));
 
-  // Enhanced U-shaped reveal animation with adjusted timing for bigger gaps
+  // 🔥 U-shaped reveal animation
   const getClipForIndex = (index: number) => {
     if (index === 0) return "none";
 
     const start = (index - 1) / cardLength;
     const end = index / cardLength;
 
-    // Reduced offset to match the new gap timing
-    const offset = 0.05; // Smaller offset for better sync with bigger gaps
+    const offset = 0.05;
     const adjustedStart = start + offset;
     const adjustedEnd = end + offset;
 
@@ -66,18 +77,15 @@ export const StickyScroll = ({
       (scrollProgress - adjustedStart) / (adjustedEnd - adjustedStart);
     const norm = clamp(raw, 0, 1);
 
-    // Smooth easing that matches text animation
     const easeInOutCubic = (t: number) =>
       t < 0.5 ? 4 * t * t * t : (t - 1) * (2 * t - 2) * (2 * t - 2) + 1;
 
     const easedProgress = easeInOutCubic(norm);
 
-    // Start tiny, end very large
     const minRadius = 0;
     const maxRadius = 200;
     const radius = minRadius + (maxRadius - minRadius) * easedProgress;
 
-    // U-shape movement
     const centerY = 100 - 50 * easedProgress;
     const centerX = 50;
 
@@ -86,10 +94,6 @@ export const StickyScroll = ({
 
   const linearGradients = [
     "linear-gradient(to bottom right, #06b6d4, #10b981)",
-    "linear-gradient(to bottom right, #ec4899, #6366f1)",
-    "linear-gradient(to bottom right, #f97316, #eab308)",
-    "linear-gradient(to bottom right, #8b5cf6, #06b6d4)",
-    "linear-gradient(to bottom right, #f59e0b, #ef4444)",
   ];
 
   const backgroundGradient =
@@ -98,22 +102,21 @@ export const StickyScroll = ({
   return (
     <motion.div
       animate={{ backgroundColor: "#03020e" }}
-      className="relative flex h-[30rem] justify-center space-x-10 rounded-md p-10"
+      className="relative flex h-screen justify-center rounded-md "
     >
       {/* Left text column with scroll */}
       <div
         ref={ref}
-        className="relative flex-1 min-w-0 max-w-xl overflow-y-auto px-4 scrollbar-hide"
+        className="relative flex-1 min-w-0 max-w-full overflow-y-auto px-4 scrollbar-hide"
       >
         {content.map((item, index) => (
-          <div key={item.title + index} className=" mb-96">
+          <div key={item.title + index} className=" mb-96 p-10">
             <motion.h2
               initial={{ opacity: 0 }}
               animate={{
                 opacity: activeCard === index ? 1 : 0.3,
                 scale: activeCard === index ? 1 : 0.95,
               }}
-              // Match the clip-path animation timing
               transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="text-3xl font-bold text-slate-100"
             >
@@ -125,7 +128,6 @@ export const StickyScroll = ({
                 opacity: activeCard === index ? 1 : 0.3,
                 y: activeCard === index ? 0 : 10,
               }}
-              // Match the clip-path animation timing with slight delay
               transition={{
                 duration: 0.6,
                 ease: [0.25, 0.46, 0.45, 0.94],
@@ -166,12 +168,12 @@ export const StickyScroll = ({
           contentClassName
         )}
       >
-        {/* Base layer: first card always visible */}
+        {/* Base layer */}
         <div className="absolute inset-0 z-0">
           {content[0]?.content ?? null}
         </div>
 
-        {/* Overlay layers: revealed with enhanced U-mask */}
+        {/* Overlay layers */}
         {content.slice(1).map((item, idx) => {
           const index = idx + 1;
           const clip = getClipForIndex(index);

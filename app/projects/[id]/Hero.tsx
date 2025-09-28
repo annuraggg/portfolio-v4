@@ -1,7 +1,7 @@
-import BrowserMockup from "@/components/BrowserMockup";
 import { Project } from "@/data/projects";
 import React from "react";
 import Links from "./Links";
+import { Safari } from "@/components/ui/safari";
 
 interface Props {
   project: Project;
@@ -29,7 +29,7 @@ const Hero = ({ project }: Props) => {
       </div>
 
       <div className="absolute -right-60 top-8 translate-x-20 w-[70vw]">
-        <BrowserMockup imageUrl={project.cover!} url={project.links?.demo} />
+        <Safari imageSrc={project.cover!} url={project.links?.demo} />
       </div>
     </div>
   );

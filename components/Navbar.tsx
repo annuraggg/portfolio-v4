@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
+import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 
 const Navbar = () => {
   const SCROLL_THRESHOLD = 100;
@@ -74,7 +75,7 @@ const Navbar = () => {
             width={100}
             height={100}
             alt="Logo"
-            className="ml-5"
+            className="ml-5 dark:invert-0 invert"
           />
         </div>
 
@@ -102,9 +103,7 @@ const Navbar = () => {
           ))}
         </div>
 
-        <div className="bg-foreground text-background px-7 py-5 rounded-4xl font-semibold">
-          Estimate Cost
-        </div>
+        <AnimatedThemeToggler />
       </div>
     </div>
   );
