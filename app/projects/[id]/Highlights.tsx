@@ -20,7 +20,7 @@ const Highlights = ({ project }: { project: Project }) => {
           {project.highlights.map((highlight, index) => (
             <div
               key={index}
-              className="text-lg font-semibold text-zinc-300 w-[28%]"
+              className="text-lg font-semibold w-[28%]"
             >
               <h3 className="text-xl font-bold">{highlight.title}</h3>
               <p className="mt-5 text font-normal">{highlight.desc}</p>

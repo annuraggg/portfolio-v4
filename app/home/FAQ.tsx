@@ -107,7 +107,7 @@ const FAQ = () => {
                 >
                   <div className="bg-card  rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 hover:border-accent/50">
                     <motion.button
-                      className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-accent/50 transition-colors duration-200"
+                      className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-foreground/10 transition-colors duration-200"
                       onClick={() => toggleItem(index)}
                       whileHover={{ scale: 1.002 }}
                       whileTap={{ scale: 0.998 }}

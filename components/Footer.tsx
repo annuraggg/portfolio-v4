@@ -58,7 +58,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <p className="text-center text-xs dark:text-zinc-400 mt-7">Last Updated on 19th July, 2025, 13:03 PM IST</p>
+      <p className="text-center text-xs dark:text-zinc-400 mt-7">Last Updated on {process.env.NEXT_PUBLIC_UPDATED_AT}</p>
     </div>
   );
 };

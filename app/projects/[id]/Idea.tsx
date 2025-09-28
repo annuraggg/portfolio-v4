@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Project } from "@/data/projects";
 import { useInView } from "motion/react";
 import React, { useRef } from "react";
@@ -20,25 +20,34 @@ const Idea = ({ project }: Props) => {
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <div>
-        <h2 className="text-5xl font-semibold text-accent">Project idea</h2>
-        <p className="mt-7 text-lg">{project.description}</p>
+      <div className="flex gap-20">
+        <div>
+          <h1 className="text-9xl font-bold opacity-50 dark:opacity-20">01</h1>
+          <h2 className="text-5xl font-semibold text-accent">Project idea</h2>
+        </div>
+        <p className="flex-1 text-lg font-semibold ">{project.description}</p>
       </div>
 
-      <div className="flex gap-20 mt-32">
-        <h2 className="text-5xl font-semibold text-accent">The Problem</h2>
-        <p className="flex-1 text-lg font-semibold text-zinc-300">
+      <div className="flex gap-20 mt-32 flex-row-reverse">
+        <div>
+          <h1 className="text-9xl font-bold opacity-50 dark:opacity-20">02</h1>
+          <h2 className="text-5xl font-semibold text-accent">The Problem</h2>
+        </div>
+        <p className="flex-1 text-lg font-semibold">
           {project.problem}
         </p>
       </div>
 
       <div className="flex gap-20 mt-32">
-        <p className="flex-1 text-lg font-semibold text-zinc-300">
+        <div>
+          <h1 className="text-9xl font-bold opacity-50 dark:opacity-20">03</h1>
+          <h2 className="text-5xl font-semibold text-right text-accent">
+            The Solution
+          </h2>
+        </div>
+        <p className="flex-1 text-lg font-semibold">
           {project.solution}
         </p>
-        <h2 className="text-5xl font-semibold text-right text-accent">
-          The Solution
-        </h2>
       </div>
     </motion.div>
   );

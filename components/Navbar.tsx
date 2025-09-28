@@ -15,6 +15,7 @@ const Navbar = () => {
   const navItems = [
     { name: "Home", path: "/" },
     { name: "Projects", path: "/projects" },
+    { name: "Experience", path: "/experience" },
     { name: "Contact", path: "/contact" },
     { name: "Blog", path: "https://blog.anuragsawant.in" },
     { name: "Resume", path: "/documents/resume.pdf" },
@@ -58,7 +59,7 @@ const Navbar = () => {
 
   return (
     <div
-      className={`flex p-5 justify-between items-center h-28 fixed w-full bg-background/50 backdrop-blur transition-normal z-100 ${
+      className={`flex p-5 px-10 justify-between items-center h-28 fixed w-full bg-background/50 backdrop-blur transition-normal z-100 ${
         showBorder ? "border-b border-white/20" : ""
       }`}
     >
@@ -101,9 +102,9 @@ const Navbar = () => {
               {item.name}
             </Link>
           ))}
-        </div>
 
-        <AnimatedThemeToggler />
+          <AnimatedThemeToggler />
+        </div>
       </div>
     </div>
   );
