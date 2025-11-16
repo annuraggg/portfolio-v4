@@ -2,6 +2,7 @@
 import React from "react";
 import { LightRays } from "@/components/ui/light-rays";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import Calculator from "./Calculator";
 
 const Estimate = () => {
   return (
@@ -10,15 +11,25 @@ const Estimate = () => {
         <h1 className="text-4xl font-bold md:text-5xl">
           Estimate Project Time
         </h1>
-
         <p className="max-w-md text-sm opacity-80 md:text-base ">
           Get a precise estimate for your digital project and establish
           realistic budget expectations with our interactive calculator.
         </p>
-
-        <InteractiveHoverButton className="mt-7">Start Calculator</InteractiveHoverButton>
+        <InteractiveHoverButton
+          className="mt-7"
+          onClick={() =>
+            (
+              document.getElementById("my_modal_1") as HTMLDialogElement | null
+            )?.showModal()
+          }
+        >
+          {" "}
+          Start Calculator
+        </InteractiveHoverButton>
       </div>
+
       <LightRays />
+      <Calculator />
     </div>
   );
 };
