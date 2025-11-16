@@ -16,8 +16,10 @@ const Rating = ({ project }: Props) => {
   const inView = useInView(ref, { amount: 0.2 });
   const { isFeatureEnabled, isLoading } = useFeatureFlags();
 
-  // Don't show rating if feature is disabled
-  if (!isLoading && !isFeatureEnabled(FEATURE_FLAGS.ENABLE_PROJECT_RATINGS)) {
+  // Show rating if feature is enabled OR if ConfigCat is not configured (defaults to showing)
+  const shouldShowRating = isLoading || isFeatureEnabled(FEATURE_FLAGS.ENABLE_PROJECT_RATINGS);
+
+  if (!shouldShowRating) {
     return null;
   }
 
