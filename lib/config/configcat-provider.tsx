@@ -56,11 +56,12 @@ export function ConfigCatProvider({ children }: ConfigCatProviderProps) {
 
   const loadFlags = async (configCatClient: configcat.IConfigCatClient) => {
     try {
-      const allKeys = await configCatClient.getAllKeys();
+      // Get all flag values at once
+      const allValues = await configCatClient.getAllValuesAsync();
       const flagValues: Record<string, boolean> = {};
 
-      for (const key of allKeys) {
-        flagValues[key] = await configCatClient.getValueAsync(key, false);
+      for (const [key, value] of Object.entries(allValues)) {
+        flagValues[key] = Boolean(value);
       }
 
       setFlags(flagValues);
