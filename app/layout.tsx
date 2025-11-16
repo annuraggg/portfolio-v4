@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import MouseFollower from "@/components/MouseFollower";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ConfigCatProvider } from "@/lib/config/configcat-provider";
+import { Toaster } from "sonner";
 
-const geistSans = Geist({
+// Fallback to system fonts
+const geistSans = {
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+};
 
-const geistMono = Geist_Mono({
+const geistMono = {
   variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+};
 
 const zonoPro = localFont({
   // src: "../assets/fonts/ZonaPro-Bold.otf",
@@ -90,10 +90,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <MouseFollower />
-          {children}
-          <Footer />
+          <ConfigCatProvider>
+            <Navbar />
+            <MouseFollower />
+            {children}
+            <Footer />
+            <Toaster position="bottom-right" />
+          </ConfigCatProvider>
         </ThemeProvider>
       </body>
     </html>

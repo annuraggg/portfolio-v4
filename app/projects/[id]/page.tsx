@@ -6,6 +6,7 @@ import Stats from "./Stats";
 import Highlights from "./Highlights";
 import TechStack from "./TechStack";
 import Screenshots from "./Screenshots";
+import Rating from "./Rating";
 interface ProjectProps {
   params: Promise<{ id: string }>;
 }
@@ -26,6 +27,7 @@ const page = async ({ params }: ProjectProps) => {
       <Idea project={project} />
       <TechStack project={project} />
       <Stats project={project} />
+      <Rating project={project} />
       <Highlights project={project} />
       <Screenshots project={project} />
     </div>
