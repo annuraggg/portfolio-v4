@@ -1,5 +1,5 @@
-import projects, { Project } from "@/data/projects";
 import React from "react";
+import { notFound } from "next/navigation";
 import Hero from "./Hero";
 import Idea from "./Idea";
 import Stats from "./Stats";
@@ -7,6 +7,7 @@ import Highlights from "./Highlights";
 import TechStack from "./TechStack";
 import Screenshots from "./Screenshots";
 import RatingContainer from "./RatingContainer";
+import { getProjectById } from "@/lib/db/projects";
 
 interface ProjectProps {
   params: Promise<{ id: string }>;
@@ -14,12 +15,10 @@ interface ProjectProps {
 
 const page = async ({ params }: ProjectProps) => {
   const { id } = await params;
-  const project: Project | undefined = projects.find(
-    (project) => project.id === id
-  );
+  const project = await getProjectById(id);
 
   if (!project) {
-    return <div className="pt-40">Project not found</div>;
+    notFound();
   }
 
   return (

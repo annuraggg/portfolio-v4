@@ -1,5 +1,5 @@
 import { IconCloud } from "@/components/ui/icon-cloud";
-import { skillsData } from "@/data/skills";
+import { getAllSkills } from "@/lib/db/skills";
 import React from "react";
 import { SkillItem } from "./SkillItem";
 
@@ -21,6 +21,7 @@ const Skills = async () => {
     return results.filter((u): u is string => u !== null);
   }
 
+  const skillsData = await getAllSkills();
   const images = await getValidImages(skillsData.map((skill) => skill.title));
 
   return (

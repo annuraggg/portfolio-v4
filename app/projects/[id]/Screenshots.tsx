@@ -1,4 +1,4 @@
-import { Project } from "@/data/projects";
+import { Project } from "@/lib/db/projects";
 import Image from "next/image";
 import React from "react";
 

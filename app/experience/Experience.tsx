@@ -1,7 +1,38 @@
-import experience from "@/data/experience";
+"use client";
+
+import { useState, useEffect } from "react";
+import type { Experience as ExperienceType } from "@/lib/db/experience";
 
 const Experience = () => {
+  const [experience, setExperience] = useState<ExperienceType[]>([]);
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    async function fetchExperience() {
+      try {
+        const response = await fetch('/api/experience');
+        if (!response.ok) {
+          throw new Error('Failed to fetch experience');
+        }
+        const data = await response.json();
+        setExperience(data);
+      } catch (err) {
+        console.error('Error loading experience:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchExperience();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center w-full">
+        <div className="animate-pulse">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center justify-center w-full">
