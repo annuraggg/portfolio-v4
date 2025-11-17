@@ -1,7 +1,6 @@
 "use client";
 
 import { toast } from "sonner";
-import emailjs from "@emailjs/browser";
 import { FormEvent, useState } from "react";
 import { useFeatureFlag } from "configcat-react";
 import "animate.css";
@@ -36,8 +35,7 @@ const ContactForm = () => {
       email === "hello@anuragsawant.in" ||
       email === "contact@anuragsawant.in"
     ) {
-      toast.warning("You can't pretend to be me!");
-      toast.warning("YOU MADE THE WEBSITE ANGRY! 😡");
+      toast.warning("You ain't Anurag :D");
       setIsAngry(true);
       setTimeout(() => setIsAngry(false), 1000);
       return;
@@ -45,15 +43,23 @@ const ContactForm = () => {
 
     setLoading(true);
     try {
-      await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        { name, email, subject, message },
-        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
-      );
+      // await emailjs.send(
+      //   process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+      //   process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+      //   { name, email, subject, message },
+      //   { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
+      // );
+
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, subject, message }),
+      });
 
       toast.success("Message sent successfully");
-      (e.currentTarget as HTMLFormElement).reset();
+      // (e.currentTarget as HTMLFormElement).reset();
     } catch (err) {
       console.error(err);
       toast.error("An error occurred. Please try again later");
