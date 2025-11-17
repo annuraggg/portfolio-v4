@@ -53,75 +53,56 @@ This guide covers deploying your portfolio to production with all features enabl
 
 ### Important Notes for Vercel
 
-- **D1 Database**: Vercel doesn't support Cloudflare D1 directly. The app will use the in-memory mock database for ratings.
-- **Alternative**: Use Vercel's PostgreSQL or another database adapter for production ratings storage.
-- **Edge Functions**: Consider using Vercel Edge Functions for optimal performance.
+- **Database**: The app uses Turso (libSQL) which works seamlessly with Vercel.
+- **Environment Variables**: Add `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in your Vercel project settings.
+- **Edge Runtime**: API routes use Node.js runtime for Turso compatibility.
+
+### Setting Up Turso for Vercel
+
+1. Create a Turso database (see Database Setup section in README.md)
+2. Get your database URL and auth token
+3. Add them as environment variables in Vercel:
+   - `TURSO_DATABASE_URL`
+   - `TURSO_AUTH_TOKEN`
+4. Run `npm run db:init` locally with these environment variables to initialize the schema
 
 ## Cloudflare Pages Deployment
 
-Cloudflare Pages provides native D1 database support, making it ideal for this project.
+Cloudflare Pages works great with Turso for database storage.
 
 ### Prerequisites
 - Cloudflare account
-- Wrangler CLI installed (`npm install -g wrangler`)
+- Turso account and database (see Database Setup in README.md)
 
 ### Steps
 
-1. **Login to Wrangler**
+1. **Login to Cloudflare**
    ```bash
-   wrangler login
+   npx wrangler login
    ```
 
-2. **Create D1 Database**
-   ```bash
-   wrangler d1 create portfolio-ratings
-   ```
-   
-   Copy the database ID from the output.
-
-3. **Update wrangler.toml**
-   ```toml
-   [[d1_databases]]
-   binding = "DB"
-   database_name = "portfolio-ratings"
-   database_id = "your-database-id-here"
-   ```
-
-4. **Run Database Migrations**
-   
-   Create a file `migrations.sql` with the schema from the README's Database Setup section, then run:
-   ```bash
-   wrangler d1 execute portfolio-ratings --file=./migrations.sql
-   ```
-
-5. **Build the Project**
+2. **Build the Project**
    ```bash
    npm run build
    ```
 
-6. **Create Pages Project**
+3. **Create Pages Project**
    ```bash
-   wrangler pages project create portfolio-v4
+   npx wrangler pages project create portfolio-v4
    ```
 
-7. **Deploy**
+4. **Deploy**
    ```bash
-   wrangler pages deploy .next
+   npx wrangler pages deploy .next
    ```
 
-8. **Add D1 Binding**
-   
-   In Cloudflare Dashboard:
-   - Go to Pages → Your Project → Settings → Functions
-   - Add D1 database binding:
-     - Variable name: `DB`
-     - D1 database: Select your `portfolio-ratings` database
-
-9. **Add Environment Variables**
+5. **Add Environment Variables**
    
    In Cloudflare Dashboard → Pages → Your Project → Settings → Environment Variables:
    
    ```
+   TURSO_DATABASE_URL=<your-turso-database-url>
+   TURSO_AUTH_TOKEN=<your-turso-auth-token>
    NEXT_PUBLIC_CONFIGCAT_SDK_KEY=<your-key>
    NEXT_PUBLIC_EMAILJS_SERVICE_ID=<your-service-id>
    NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=<your-template-id>
@@ -141,7 +122,7 @@ Cloudflare Pages provides native D1 database support, making it ideal for this p
    - Build command: `npm run build`
    - Build output directory: `.next`
 
-3. **Add D1 Binding and Environment Variables** (as above)
+3. **Add Environment Variables** (as above)
 
 4. **Deploy**
    - Push to your main branch
@@ -153,47 +134,33 @@ Cloudflare Pages provides native D1 database support, making it ideal for this p
 
 | Variable | Description | Where to Get |
 |----------|-------------|--------------|
+| `TURSO_DATABASE_URL` | Turso database URL | [Turso Dashboard](https://turso.tech) or CLI (`turso db show <name> --url`) |
+| `TURSO_AUTH_TOKEN` | Turso authentication token | Turso CLI (`turso db tokens create <name>`) |
 | `NEXT_PUBLIC_CONFIGCAT_SDK_KEY` | ConfigCat SDK key for feature flags | [ConfigCat Dashboard](https://app.configcat.com) |
 | `NEXT_PUBLIC_EMAILJS_SERVICE_ID` | EmailJS service ID | [EmailJS Dashboard](https://dashboard.emailjs.com) |
 | `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` | EmailJS template ID | [EmailJS Dashboard](https://dashboard.emailjs.com) |
 | `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` | EmailJS public key | [EmailJS Dashboard](https://dashboard.emailjs.com) |
 
-### Optional (Cloudflare Pages Only)
-
-| Variable | Description |
-|----------|-------------|
-| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID |
-| `CLOUDFLARE_DATABASE_ID` | D1 database ID |
-| `CLOUDFLARE_API_TOKEN` | API token with D1 permissions |
-
 ## Database Setup
 
-### For Cloudflare Pages (Production)
+### For Production (All Platforms)
 
-1. Create the database:
-   ```bash
-   wrangler d1 create portfolio-ratings
-   ```
+Follow the Database Setup section in the [README.md](../README.md#database-setup-turso) for detailed instructions on setting up Turso.
 
-2. Run migrations (see Database Setup section in README.md):
-   ```bash
-   wrangler d1 execute portfolio-ratings --file=./migrations.sql
-   ```
+Quick steps:
+1. Install Turso CLI: `curl -sSfL https://get.tur.so/install.sh | bash`
+2. Create database: `turso db create portfolio-ratings`
+3. Get URL: `turso db show portfolio-ratings --url`
+4. Create token: `turso db tokens create portfolio-ratings`
+5. Initialize schema: `npm run db:init` (with env vars set)
 
-3. Verify:
-   ```bash
-   wrangler d1 execute portfolio-ratings --command="SELECT name FROM sqlite_master WHERE type='table';"
-   ```
+### For Local Development
 
-See the Database Setup section in [README.md](../README.md#database-setup-d1) for detailed database documentation.
+For local development, the app uses a local SQLite file by default. No additional setup required!
 
-### For Vercel or Other Platforms
-
-The app is designed to work with Cloudflare D1 database. For other platforms:
-
-1. Choose a database (PostgreSQL, MySQL, etc.)
-2. Create a new adapter in `lib/db/`
-3. Update API routes in `app/api/ratings/` to use your adapter
+1. Run `npm run db:init` to initialize the schema
+2. The database file `local.db` will be created automatically
+3. Run `npm run dev` to start development
 
 ## Feature Flags Setup
 
@@ -273,10 +240,11 @@ Recommended tools:
 
 ### Ratings Not Working
 
-1. Verify D1 database is properly bound (Cloudflare Pages)
-2. Check environment variables are set
-3. Verify API routes are deployed
-4. Check browser console for errors
+1. Verify Turso database credentials are set correctly (`TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN`)
+2. Check environment variables are set in your deployment platform
+3. Ensure database schema is initialized (`npm run db:init`)
+4. Verify API routes are deployed
+5. Check browser console and server logs for errors
 
 ### Feature Flags Not Working
 

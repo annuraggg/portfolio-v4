@@ -1,11 +1,9 @@
 name = "portfolio-v4"
 compatibility_date = "2024-01-01"
 
-# D1 Database binding
-[[d1_databases]]
-binding = "DB"
-database_name = "portfolio-2025"
-database_id = "7e075544-d5ea-42bb-9a79-74d660972a59"
+# Note: This project now uses Turso instead of D1
+# If deploying to Cloudflare Pages, add TURSO_DATABASE_URL and TURSO_AUTH_TOKEN 
+# as environment variables in your project settings
 
 # Environment variables
 [vars]

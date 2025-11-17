@@ -5,7 +5,7 @@ A modern, production-ready portfolio website built with Next.js 15, TypeScript, 
 ## 🚀 Features
 
 - **Modern Tech Stack**: Next.js 15, React 19, TypeScript, Tailwind CSS v4
-- **Project Ratings**: Interactive star ratings powered by Cloudflare D1 database
+- **Project Ratings**: Interactive star ratings powered by Turso (libSQL) database
 - **Feature Flags**: ConfigCat integration for feature toggling without deployments
 - **Responsive Design**: DaisyUI components with custom theming
 - **Smooth Animations**: Framer Motion for engaging user experience
@@ -16,7 +16,7 @@ A modern, production-ready portfolio website built with Next.js 15, TypeScript, 
 ## 📋 Prerequisites
 
 - Node.js 18+ and npm
-- (Optional) Cloudflare account for D1 database
+- (Optional) Turso account for production database (free tier available)
 - (Optional) ConfigCat account for feature flags
 
 ## 🛠️ Installation
@@ -48,10 +48,9 @@ Edit `.env.local` with your configuration:
 # ConfigCat Feature Flags (optional)
 NEXT_PUBLIC_CONFIGCAT_SDK_KEY=your_sdk_key_here
 
-# Cloudflare D1 Database (optional for local dev)
-CLOUDFLARE_ACCOUNT_ID=your_account_id
-CLOUDFLARE_DATABASE_ID=your_database_id
-CLOUDFLARE_API_TOKEN=your_api_token
+# Turso Database (optional for local dev, uses local.db by default)
+TURSO_DATABASE_URL=libsql://your-database.turso.io
+TURSO_AUTH_TOKEN=your_auth_token_here
 
 # Email Service
 NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
@@ -67,112 +66,76 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to see your portfolio.
 
-## 🗄️ Database Setup (D1)
+## 🗄️ Database Setup (Turso)
 
-The project uses Cloudflare D1 for storing project ratings. The application uses a single D1 database instance for both development and production.
-
-### Prerequisites
-
-- Cloudflare account
-- Wrangler CLI installed: `npm install -g wrangler`
-
-### Setup Steps
-
-1. **Login to Cloudflare**
-   ```bash
-   wrangler login
-   ```
-
-2. **Create D1 Database**
-   ```bash
-   wrangler d1 create portfolio-ratings
-   ```
-   
-   This will output your database ID. Copy it and update `wrangler.toml`:
-   ```toml
-   [[d1_databases]]
-   binding = "DB"
-   database_name = "portfolio-ratings"
-   database_id = "YOUR_DATABASE_ID_HERE"
-   ```
-
-3. **Run Database Migration**
-   
-   Create a file `migrations.sql` with the following content:
-   
-   ```sql
-   -- Create ratings table for storing project ratings
-   CREATE TABLE IF NOT EXISTS ratings (
-     id INTEGER PRIMARY KEY AUTOINCREMENT,
-     project_id TEXT NOT NULL,
-     rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
-     user_identifier TEXT NOT NULL,
-     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-     UNIQUE(project_id, user_identifier)
-   );
-
-   -- Create index for faster lookups
-   CREATE INDEX IF NOT EXISTS idx_project_id ON ratings(project_id);
-   CREATE INDEX IF NOT EXISTS idx_user_identifier ON ratings(project_id, user_identifier);
-
-   -- Create aggregated view for ratings statistics
-   CREATE VIEW IF NOT EXISTS project_ratings_stats AS
-   SELECT 
-     project_id,
-     COUNT(*) as total_ratings,
-     AVG(rating) as average_rating
-   FROM ratings
-   GROUP BY project_id;
-   ```
-   
-   Then run:
-   ```bash
-   wrangler d1 execute portfolio-ratings --file=./migrations.sql
-   ```
-
-4. **Verify Database**
-   ```bash
-   wrangler d1 execute portfolio-ratings --command="SELECT name FROM sqlite_master WHERE type='table';"
-   ```
-   
-   You should see the `ratings` table listed.
+The project uses Turso (libSQL) for storing project ratings. For local development, it uses a local SQLite file by default. For production, you can use a remote Turso database.
 
 ### Local Development
 
-For local development with Wrangler:
+By default, the application uses a local SQLite database file (`local.db`) for development. No additional setup is required!
 
-```bash
-npx wrangler dev
-```
+1. **Initialize the database schema**
+   ```bash
+   npm run db:init
+   ```
 
-This will start the Next.js dev server with D1 database bindings available.
+2. **Run the development server**
+   ```bash
+   npm run dev
+   ```
 
-### Production Deployment
+The database will be automatically created in the project root as `local.db`.
 
-When deploying to Cloudflare Pages:
+### Production Setup (Turso Cloud)
 
-1. Set up the D1 binding in your Pages project settings
-2. Bind the database with the name `DB` (matching your wrangler.toml)
-3. The application will automatically use the D1 database
+For production deployments, use Turso's cloud database service:
 
-### Database Operations
+#### Prerequisites
 
-#### View all ratings for a project
-```bash
-wrangler d1 execute portfolio-ratings --command="SELECT * FROM ratings WHERE project_id='your-project-id';"
-```
+- Turso CLI installed: `curl -sSfL https://get.tur.so/install.sh | bash`
 
-#### Get rating statistics
-```bash
-wrangler d1 execute portfolio-ratings --command="SELECT * FROM project_ratings_stats;"
-```
+#### Setup Steps
 
-#### Clear all ratings (use with caution)
-```bash
-wrangler d1 execute portfolio-ratings --command="DELETE FROM ratings;"
-```
+1. **Sign up and login to Turso**
+   ```bash
+   turso auth signup
+   # or if you already have an account
+   turso auth login
+   ```
+
+2. **Create a database**
+   ```bash
+   turso db create portfolio-ratings
+   ```
+
+3. **Get the database URL**
+   ```bash
+   turso db show portfolio-ratings --url
+   ```
+
+4. **Create an authentication token**
+   ```bash
+   turso db tokens create portfolio-ratings
+   ```
+
+5. **Add to your environment variables**
+   
+   In your deployment platform (Vercel, Cloudflare Pages, etc.), add:
+   ```
+   TURSO_DATABASE_URL=libsql://[your-database-url].turso.io
+   TURSO_AUTH_TOKEN=your_auth_token_here
+   ```
+
+6. **Initialize the production database schema**
+   
+   With the environment variables set:
+   ```bash
+   npm run db:init
+   ```
 
 ### Database Schema
+
+The database uses the following schema:
 
 **Table: `ratings`**
 - `id`: Auto-incrementing primary key
@@ -181,12 +144,30 @@ wrangler d1 execute portfolio-ratings --command="DELETE FROM ratings;"
 - `user_identifier`: Unique identifier for the user
 - `created_at`: Timestamp of when the rating was created
 
-**View: `project_ratings_stats`**
-- `project_id`: Project identifier
-- `total_ratings`: Count of all ratings for the project
-- `average_rating`: Average rating score
+**Indexes:**
+- `idx_project_id` on `project_id`
+- `idx_user_identifier` on `(project_id, user_identifier)`
 
 Users can only rate each project once (enforced by unique constraint on `project_id` + `user_identifier`).
+
+### Database Operations
+
+With Turso CLI, you can interact with your database:
+
+#### View all ratings for a project
+```bash
+turso db shell portfolio-ratings "SELECT * FROM ratings WHERE project_id='your-project-id';"
+```
+
+#### Get rating statistics
+```bash
+turso db shell portfolio-ratings "SELECT project_id, COUNT(*) as total_ratings, AVG(rating) as average_rating FROM ratings GROUP BY project_id;"
+```
+
+#### Clear all ratings (use with caution)
+```bash
+turso db shell portfolio-ratings "DELETE FROM ratings;"
+```
 
 ## 🎚️ Feature Flags Setup (Optional)
 
@@ -222,7 +203,7 @@ portfolio-v4/
 │   └── ui/               # UI components
 ├── lib/                   # Utilities and configurations
 │   ├── config/           # Feature flags configuration
-│   └── db/               # Database utilities (D1 client)
+│   └── db/               # Database utilities (Turso client)
 ├── data/                  # Static data (projects, skills, etc.)
 └── public/                # Static assets
 ```
@@ -235,6 +216,7 @@ portfolio-v4/
 - `npm run build` - Build for production
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
+- `npm run db:init` - Initialize database schema
 
 ### Adding a New Project
 
@@ -276,10 +258,15 @@ Edit `data/projects.ts` and add your project to the array:
 npm run build
 ```
 
-2. Deploy to Cloudflare Pages with D1 binding:
+2. Deploy to Cloudflare Pages:
 ```bash
-wrangler pages deploy out
+npx wrangler pages deploy .next
 ```
+
+3. Add environment variables in Cloudflare Pages dashboard:
+   - `TURSO_DATABASE_URL`
+   - `TURSO_AUTH_TOKEN`
+   - Other required env vars
 
 ## 🔧 Configuration
 
@@ -317,5 +304,5 @@ Project Link: [https://github.com/annuraggg/portfolio-v4](https://github.com/ann
 - [Tailwind CSS](https://tailwindcss.com/)
 - [DaisyUI](https://daisyui.com/)
 - [ConfigCat](https://configcat.com/)
-- [Cloudflare D1](https://developers.cloudflare.com/d1/)
+- [Turso](https://turso.tech/)
 - [Framer Motion](https://www.framer.com/motion/)
