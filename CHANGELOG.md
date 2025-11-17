@@ -18,11 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - User rating tracking to prevent duplicate ratings
 - Comprehensive deployment guide (`DEPLOYMENT.md`)
 - Features documentation (`FEATURES.md`)
-- Database setup guide (`db/README.md`)
+- Database setup guide (in `README.md`)
+- Feature flags documentation (`FEATURE_FLAGS.md`)
 - Feature flags setup guide (`lib/config/README.md`)
 - Environment variable examples (`.env.example`)
 - TypeScript type definitions for environment variables
-- Database migration files for Cloudflare D1
+- Database migration SQL in README
 - Wrangler configuration for Cloudflare deployment
 - Toast notifications using Sonner
 - Updated README with complete setup instructions
