@@ -11,8 +11,8 @@ const ContactForm = () => {
   const [isAngry, setIsAngry] = useState(false);
 
   const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
-    "enableContactForm",
-    true // Default to true for backward compatibility
+    "enablecontactform",
+    true
   );
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
@@ -62,9 +62,8 @@ const ContactForm = () => {
     }
   }
 
-  // If feature is disabled, return null or a message
   if (isLoadingFlag) {
-    return null; // Or a loading skeleton
+    return null;
   }
 
   if (!isFeatureEnabled) {

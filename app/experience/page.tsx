@@ -8,8 +8,8 @@ import { useFeatureFlag } from "configcat-react";
 
 const ExperiencePage = () => {
   const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
-    "enableExperience",
-    true // Default to true for backward compatibility
+    "enableexperience",
+    true
   );
 
   if (isLoadingFlag) {

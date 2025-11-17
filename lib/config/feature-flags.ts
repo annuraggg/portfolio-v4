@@ -4,26 +4,13 @@
  */
 
 export const FEATURE_FLAGS = {
-  // Project ratings feature
-  ENABLE_PROJECT_RATINGS: 'enableProjectRatings',
-  
-  // Contact form feature
-  ENABLE_CONTACT_FORM: 'enableContactForm',
-  
-  // Projects showcase
-  ENABLE_PROJECTS: 'enableProjects',
-  
-  // Experience section
-  ENABLE_EXPERIENCE: 'enableExperience',
-  
-  // Theme switcher
-  ENABLE_THEME_SWITCHER: 'enableThemeSwitcher',
-  
-  // Mouse follower animation
-  ENABLE_MOUSE_FOLLOWER: 'enableMouseFollower',
-  
-  // Development mode projects
-  SHOW_DEVELOPMENT_PROJECTS: 'showDevelopmentProjects',
+  ENABLE_PROJECT_RATINGS: "enableprojectratings",
+  ENABLE_CONTACT_FORM: "enablecontactform",
+  ENABLE_PROJECTS: "enableprojects",
+  ENABLE_EXPERIENCE: "enableexperience",
+  ENABLE_THEME_SWITCHER: "enablethemeswitcher",
+  ENABLE_MOUSE_FOLLOWER: "enablemousefollower",
+  SHOW_DEVELOPMENT_PROJECTS: "showdevelopmentprojects",
 } as const;
 
-export type FeatureFlag = typeof FEATURE_FLAGS[keyof typeof FEATURE_FLAGS];
+export type FeatureFlag = (typeof FEATURE_FLAGS)[keyof typeof FEATURE_FLAGS];

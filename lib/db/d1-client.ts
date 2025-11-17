@@ -1,9 +1,9 @@
 /**
  * D1 Database Client for Cloudflare Pages
- * Provides a unified database access for both development and production
+ * Provides database access through async context
  */
 
-import { getRequestContext } from '@cloudflare/next-on-pages';
+import { AsyncLocalStorage } from "async_hooks";
 
 interface D1Database {
   prepare(query: string): D1PreparedStatement;
@@ -33,32 +33,57 @@ interface D1ExecResult {
   };
 }
 
-/**
- * Get the D1 database instance
- * Works in both development (with wrangler dev) and production (Cloudflare Pages)
- */
-export function getD1Database(): D1Database {
-  try {
-    // Try to get the database from the request context (Cloudflare Pages runtime)
-    const context = getRequestContext();
-    if (context?.env?.DB) {
-      return context.env.DB as D1Database;
-    }
-  } catch {
-    // getRequestContext() throws if not in a request context
-    // This is expected during build time or in non-edge environments
-  }
-
-  // Fallback: Check if DB is available in global scope (for wrangler dev)
-  // @ts-expect-error - DB is injected by Cloudflare runtime
-  if (typeof globalThis.DB !== 'undefined') {
-    // @ts-expect-error - DB is injected by Cloudflare runtime
-    return globalThis.DB as D1Database;
-  }
-
-  throw new Error(
-    'D1 database is not available. Make sure you are running with wrangler dev or deployed to Cloudflare Pages with D1 binding configured.'
-  );
+interface CloudflareEnv {
+  DB: D1Database;
 }
 
-export type { D1Database, D1PreparedStatement, D1Result, D1ExecResult };
+// Store for request context
+const requestContextStore = new AsyncLocalStorage<CloudflareEnv>();
+
+/**
+ * Middleware helper to set the request context
+ * Call this in your middleware.ts or API route handler
+ */
+export function setRequestContext(env: CloudflareEnv) {
+  return requestContextStore.getStore() || env;
+}
+
+/**
+ * Get the current request context
+ */
+export function getRequestContext(): CloudflareEnv | undefined {
+  return requestContextStore.getStore();
+}
+
+/**
+ * Get the D1 database instance from the current request context
+ * Must be called within a request handler after context is set
+ */
+export function getD1Database(): D1Database {
+  const context = getRequestContext();
+
+  if (!context?.DB) {
+    throw new Error(
+      "D1 database is not available in the current context. " +
+        "Make sure you're calling this within a request handler and have configured D1 bindings."
+    );
+  }
+
+  return context.DB;
+}
+
+/**
+ * Run a function with the Cloudflare environment context
+ * Use this in middleware or API routes to provide context to downstream code
+ */
+export function withRequestContext<T>(env: CloudflareEnv, fn: () => T): T {
+  return requestContextStore.run(env, fn);
+}
+
+export type {
+  D1Database,
+  D1PreparedStatement,
+  D1Result,
+  D1ExecResult,
+  CloudflareEnv,
+};

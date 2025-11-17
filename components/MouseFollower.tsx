@@ -8,8 +8,8 @@ export default function MouseFollower() {
   const [hidden, setHidden] = useState(false);
 
   const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
-    "enableMouseFollower",
-    true // Default to true for backward compatibility
+    "enablemousefollower",
+    true
   );
 
   useEffect(() => {

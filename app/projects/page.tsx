@@ -7,8 +7,8 @@ import { useFeatureFlag } from "configcat-react";
 
 const ProjectsPage = () => {
   const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
-    "enableProjects",
-    true // Default to true for backward compatibility
+    "enableprojects",
+    true
   );
 
   if (isLoadingFlag) {
