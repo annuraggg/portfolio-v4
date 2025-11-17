@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getD1Database } from '@/lib/db/d1-client';
+import { queryFirst } from '@/lib/db/turso-client';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export async function GET(
   request: NextRequest,
@@ -20,14 +20,10 @@ export async function GET(
     }
 
     try {
-      const db = getD1Database();
-      
-      const result = await db
-        .prepare(
-          'SELECT id FROM ratings WHERE project_id = ? AND user_identifier = ? LIMIT 1'
-        )
-        .bind(projectId, userIdentifier)
-        .first();
+      const result = await queryFirst(
+        'SELECT id FROM ratings WHERE project_id = ? AND user_identifier = ? LIMIT 1',
+        [projectId, userIdentifier]
+      );
 
       return NextResponse.json({ hasRated: !!result });
     } catch (error) {
