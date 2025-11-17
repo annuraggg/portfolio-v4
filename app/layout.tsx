@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import MouseFollower from "@/components/MouseFollower";
 import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ConfigCatProvider } from "@/lib/config/configcat-provider";
+import { ConfigCatProvider } from "configcat-react";
 import { Toaster } from "sonner";
 
 // Fallback to system fonts
@@ -79,6 +79,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const CONFIGCAT_SDK_KEY = process.env.NEXT_PUBLIC_CONFIGCAT_SDK_KEY;
+
+  if (!CONFIGCAT_SDK_KEY) {
+    throw new Error("ConfigCat SDK key is not defined in environment variables.");
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -90,7 +96,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ConfigCatProvider>
+          <ConfigCatProvider sdkKey={CONFIGCAT_SDK_KEY}>
             <Navbar />
             <MouseFollower />
             {children}
