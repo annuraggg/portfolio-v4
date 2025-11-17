@@ -4,8 +4,8 @@ compatibility_date = "2024-01-01"
 # D1 Database binding
 [[d1_databases]]
 binding = "DB"
-database_name = "portfolio-ratings"
-database_id = "" # Add your database ID here
+database_name = "portfolio-2025"
+database_id = "7e075544-d5ea-42bb-9a79-74d660972a59"
 
 # Environment variables
 [vars]
