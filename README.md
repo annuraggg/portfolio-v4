@@ -67,18 +67,126 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to see your portfolio.
 
-## 🗄️ Database Setup (Optional)
+## 🗄️ Database Setup (D1)
 
-The project uses Cloudflare D1 for storing project ratings. For local development, an in-memory mock database is used automatically.
+The project uses Cloudflare D1 for storing project ratings. The application uses a single D1 database instance for both development and production.
 
-To set up the production database:
+### Prerequisites
 
-1. Install Wrangler CLI:
+- Cloudflare account
+- Wrangler CLI installed: `npm install -g wrangler`
+
+### Setup Steps
+
+1. **Login to Cloudflare**
+   ```bash
+   wrangler login
+   ```
+
+2. **Create D1 Database**
+   ```bash
+   wrangler d1 create portfolio-ratings
+   ```
+   
+   This will output your database ID. Copy it and update `wrangler.toml`:
+   ```toml
+   [[d1_databases]]
+   binding = "DB"
+   database_name = "portfolio-ratings"
+   database_id = "YOUR_DATABASE_ID_HERE"
+   ```
+
+3. **Run Database Migration**
+   
+   Create a file `migrations.sql` with the following content:
+   
+   ```sql
+   -- Create ratings table for storing project ratings
+   CREATE TABLE IF NOT EXISTS ratings (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     project_id TEXT NOT NULL,
+     rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
+     user_identifier TEXT NOT NULL,
+     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+     UNIQUE(project_id, user_identifier)
+   );
+
+   -- Create index for faster lookups
+   CREATE INDEX IF NOT EXISTS idx_project_id ON ratings(project_id);
+   CREATE INDEX IF NOT EXISTS idx_user_identifier ON ratings(project_id, user_identifier);
+
+   -- Create aggregated view for ratings statistics
+   CREATE VIEW IF NOT EXISTS project_ratings_stats AS
+   SELECT 
+     project_id,
+     COUNT(*) as total_ratings,
+     AVG(rating) as average_rating
+   FROM ratings
+   GROUP BY project_id;
+   ```
+   
+   Then run:
+   ```bash
+   wrangler d1 execute portfolio-ratings --file=./migrations.sql
+   ```
+
+4. **Verify Database**
+   ```bash
+   wrangler d1 execute portfolio-ratings --command="SELECT name FROM sqlite_master WHERE type='table';"
+   ```
+   
+   You should see the `ratings` table listed.
+
+### Local Development
+
+For local development with Wrangler:
+
 ```bash
-npm install -g wrangler
+npx wrangler dev
 ```
 
-2. Follow the detailed setup guide in [db/README.md](./db/README.md)
+This will start the Next.js dev server with D1 database bindings available.
+
+### Production Deployment
+
+When deploying to Cloudflare Pages:
+
+1. Set up the D1 binding in your Pages project settings
+2. Bind the database with the name `DB` (matching your wrangler.toml)
+3. The application will automatically use the D1 database
+
+### Database Operations
+
+#### View all ratings for a project
+```bash
+wrangler d1 execute portfolio-ratings --command="SELECT * FROM ratings WHERE project_id='your-project-id';"
+```
+
+#### Get rating statistics
+```bash
+wrangler d1 execute portfolio-ratings --command="SELECT * FROM project_ratings_stats;"
+```
+
+#### Clear all ratings (use with caution)
+```bash
+wrangler d1 execute portfolio-ratings --command="DELETE FROM ratings;"
+```
+
+### Database Schema
+
+**Table: `ratings`**
+- `id`: Auto-incrementing primary key
+- `project_id`: String identifier for the project
+- `rating`: Integer between 1-5
+- `user_identifier`: Unique identifier for the user
+- `created_at`: Timestamp of when the rating was created
+
+**View: `project_ratings_stats`**
+- `project_id`: Project identifier
+- `total_ratings`: Count of all ratings for the project
+- `average_rating`: Average rating score
+
+Users can only rate each project once (enforced by unique constraint on `project_id` + `user_identifier`).
 
 ## 🎚️ Feature Flags Setup (Optional)
 

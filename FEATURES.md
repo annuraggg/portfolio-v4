@@ -287,7 +287,7 @@ To set up the ratings database:
 4. Run migrations
 5. Add D1 binding to your deployment
 
-See [db/README.md](db/README.md) for detailed setup instructions.
+See the Database Setup section in [README.md](README.md#database-setup-d1) for detailed setup instructions.
 
 ## Contributing
 

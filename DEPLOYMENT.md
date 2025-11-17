@@ -88,8 +88,10 @@ Cloudflare Pages provides native D1 database support, making it ideal for this p
    ```
 
 4. **Run Database Migrations**
+   
+   Create a file `migrations.sql` with the schema from the README's Database Setup section, then run:
    ```bash
-   wrangler d1 execute portfolio-ratings --file=./db/migrations/001_create_ratings.sql
+   wrangler d1 execute portfolio-ratings --file=./migrations.sql
    ```
 
 5. **Build the Project**
@@ -173,9 +175,9 @@ Cloudflare Pages provides native D1 database support, making it ideal for this p
    wrangler d1 create portfolio-ratings
    ```
 
-2. Run migrations:
+2. Run migrations (see Database Setup section in README.md):
    ```bash
-   wrangler d1 execute portfolio-ratings --file=./db/migrations/001_create_ratings.sql
+   wrangler d1 execute portfolio-ratings --file=./migrations.sql
    ```
 
 3. Verify:
@@ -183,11 +185,11 @@ Cloudflare Pages provides native D1 database support, making it ideal for this p
    wrangler d1 execute portfolio-ratings --command="SELECT name FROM sqlite_master WHERE type='table';"
    ```
 
-See [db/README.md](../db/README.md) for detailed database documentation.
+See the Database Setup section in [README.md](../README.md#database-setup-d1) for detailed database documentation.
 
 ### For Vercel or Other Platforms
 
-The app includes a mock in-memory database for development and platforms that don't support D1. To use a real database:
+The app is designed to work with Cloudflare D1 database. For other platforms:
 
 1. Choose a database (PostgreSQL, MySQL, etc.)
 2. Create a new adapter in `lib/db/`
