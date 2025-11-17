@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { flushSync } from "react-dom"
+import { useFeatureFlag } from "configcat-react"
 
 import { cn } from "@/lib/utils"
 
@@ -13,6 +14,11 @@ type Props = {
 export const AnimatedThemeToggler = ({ className }: Props) => {
   const [isDark, setIsDark] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
+    "enableThemeSwitcher",
+    true // Default to true for backward compatibility
+  )
 
   useEffect(() => {
     const updateTheme = () => {
@@ -65,6 +71,10 @@ export const AnimatedThemeToggler = ({ className }: Props) => {
       }
     )
   }, [isDark])
+
+  if (isLoadingFlag || !isFeatureEnabled) {
+    return null;
+  }
 
   return (
     <button ref={buttonRef} onClick={toggleTheme} className={cn(className)}>

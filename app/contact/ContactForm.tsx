@@ -3,11 +3,17 @@
 import { toast } from "sonner";
 import emailjs from "@emailjs/browser";
 import { FormEvent, useState } from "react";
+import { useFeatureFlag } from "configcat-react";
 import "animate.css";
 
 const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [isAngry, setIsAngry] = useState(false);
+
+  const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
+    "enableContactForm",
+    true // Default to true for backward compatibility
+  );
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -54,6 +60,15 @@ const ContactForm = () => {
     } finally {
       setLoading(false);
     }
+  }
+
+  // If feature is disabled, return null or a message
+  if (isLoadingFlag) {
+    return null; // Or a loading skeleton
+  }
+
+  if (!isFeatureEnabled) {
+    return null;
   }
 
   return (
