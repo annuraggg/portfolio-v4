@@ -5,7 +5,9 @@ A modern, production-ready portfolio website built with Next.js 15, TypeScript, 
 ## 🚀 Features
 
 - **Modern Tech Stack**: Next.js 15, React 19, TypeScript, Tailwind CSS v4
-- **Project Ratings**: Interactive star ratings powered by Turso (libSQL) database
+- **Turso Database**: All portfolio data (projects, experience, credentials, skills) stored in Turso (libSQL)
+- **Project Ratings**: Interactive star ratings with database integration
+- **RESTful APIs**: Production-ready API routes for all data types
 - **Feature Flags**: ConfigCat integration for feature toggling without deployments
 - **Responsive Design**: DaisyUI components with custom theming
 - **Smooth Animations**: Framer Motion for engaging user experience
@@ -68,7 +70,7 @@ Open [http://localhost:3000](http://localhost:3000) to see your portfolio.
 
 ## 🗄️ Database Setup (Turso)
 
-The project uses Turso (libSQL) for storing project ratings. For local development, it uses a local SQLite file by default. For production, you can use a remote Turso database.
+The project uses Turso (libSQL) for storing all portfolio data including projects, experience, credentials, skills, and ratings. For local development, it uses a local SQLite file by default. For production, you can use a remote Turso database.
 
 ### Local Development
 
@@ -79,7 +81,18 @@ By default, the application uses a local SQLite database file (`local.db`) for d
    npm run db:init
    ```
 
-2. **Run the development server**
+2. **Migrate data from TypeScript files to database**
+   ```bash
+   npm run migrate
+   ```
+   
+   This will populate the database with:
+   - Projects (8 projects)
+   - Experience entries (5 entries)
+   - Credentials (5 certifications)
+   - Skills (29 skills)
+
+3. **Run the development server**
    ```bash
    npm run dev
    ```
@@ -105,17 +118,17 @@ For production deployments, use Turso's cloud database service:
 
 2. **Create a database**
    ```bash
-   turso db create portfolio-ratings
+   turso db create portfolio-db
    ```
 
 3. **Get the database URL**
    ```bash
-   turso db show portfolio-ratings --url
+   turso db show portfolio-db --url
    ```
 
 4. **Create an authentication token**
    ```bash
-   turso db tokens create portfolio-ratings
+   turso db tokens create portfolio-db
    ```
 
 5. **Add to your environment variables**
@@ -126,47 +139,70 @@ For production deployments, use Turso's cloud database service:
    TURSO_AUTH_TOKEN=your_auth_token_here
    ```
 
-6. **Initialize the production database schema**
+6. **Initialize and migrate the production database**
    
    With the environment variables set:
    ```bash
-   npm run db:init
+   npm run migrate
    ```
 
 ### Database Schema
 
 The database uses the following schema:
 
+**Table: `projects`**
+- All project information including title, description, technologies, links, etc.
+- Stores highlights and technologies as JSON arrays
+- Foreign key relationship with ratings table
+
 **Table: `ratings`**
 - `id`: Auto-incrementing primary key
-- `project_id`: String identifier for the project
+- `project_id`: Foreign key to projects table
 - `rating`: Integer between 1-5
 - `user_identifier`: Unique identifier for the user
 - `created_at`: Timestamp of when the rating was created
 
-**Indexes:**
-- `idx_project_id` on `project_id`
-- `idx_user_identifier` on `(project_id, user_identifier)`
+**Table: `experience`**
+- Work experience and achievements
+- Includes title, date, description, and role
 
-Users can only rate each project once (enforced by unique constraint on `project_id` + `user_identifier`).
+**Table: `credentials`**
+- Certifications and credentials
+- Includes title, date, link, and organization
+
+**Table: `skills`**
+- Technical skills with optional proficiency tracking
+- Includes title and optional progress link
+
+**Indexes:**
+- `idx_project_id` on `ratings(project_id)`
+- `idx_user_identifier` on `ratings(project_id, user_identifier)`
+- Date indexes on all timestamped tables
+
+For detailed schema information, see [TURSO_MIGRATION.md](./TURSO_MIGRATION.md).
 
 ### Database Operations
 
 With Turso CLI, you can interact with your database:
 
+#### View all projects
+```bash
+turso db shell portfolio-db "SELECT id, title FROM projects;"
+```
+
 #### View all ratings for a project
 ```bash
-turso db shell portfolio-ratings "SELECT * FROM ratings WHERE project_id='your-project-id';"
+turso db shell portfolio-db "SELECT * FROM ratings WHERE project_id='your-project-id';"
 ```
 
 #### Get rating statistics
 ```bash
-turso db shell portfolio-ratings "SELECT project_id, COUNT(*) as total_ratings, AVG(rating) as average_rating FROM ratings GROUP BY project_id;"
+turso db shell portfolio-db "SELECT project_id, COUNT(*) as total_ratings, AVG(rating) as average_rating FROM ratings GROUP BY project_id;"
 ```
 
 #### Clear all ratings (use with caution)
 ```bash
-turso db shell portfolio-ratings "DELETE FROM ratings;"
+turso db shell portfolio-db "DELETE FROM ratings;"
 ```
 
 ## 🎚️ Feature Flags Setup (Optional)
@@ -193,6 +229,10 @@ Available feature flags:
 portfolio-v4/
 ├── app/                    # Next.js app directory
 │   ├── api/               # API routes
+│   │   ├── projects/      # Projects API endpoints
+│   │   ├── experience/    # Experience API endpoint
+│   │   ├── credentials/   # Credentials API endpoint
+│   │   ├── skills/        # Skills API endpoint
 │   │   └── ratings/       # Rating endpoints
 │   ├── projects/          # Project pages
 │   ├── home/              # Home page components
@@ -203,8 +243,16 @@ portfolio-v4/
 │   └── ui/               # UI components
 ├── lib/                   # Utilities and configurations
 │   ├── config/           # Feature flags configuration
-│   └── db/               # Database utilities (Turso client)
-├── data/                  # Static data (projects, skills, etc.)
+│   └── db/               # Database utilities and queries
+│       ├── turso-client.ts   # Turso client and schema
+│       ├── projects.ts       # Project queries
+│       ├── experience.ts     # Experience queries
+│       ├── credentials.ts    # Credentials queries
+│       └── skills.ts         # Skills queries
+├── scripts/               # Utility scripts
+│   ├── init-db.ts        # Database schema initialization
+│   └── migrate-to-turso.ts  # Data migration script
+├── data/                  # Legacy data files (for reference)
 └── public/                # Static assets
 ```
 
@@ -217,27 +265,57 @@ portfolio-v4/
 - `npm start` - Start production server
 - `npm run lint` - Run ESLint
 - `npm run db:init` - Initialize database schema
+- `npm run migrate` - Migrate data from TypeScript files to Turso database
 
 ### Adding a New Project
 
-Edit `data/projects.ts` and add your project to the array:
+Projects are now stored in the Turso database. To add a new project:
+
+#### Option 1: Direct Database Insert (Recommended for Production)
+
+Use the Turso CLI or your database admin interface to insert directly:
+
+```sql
+INSERT INTO projects (
+  id, title, date, role, timeline, summary, description,
+  highlights, technologies, links, development, group_name
+) VALUES (
+  'my-project',
+  'My Project',
+  '2024',
+  'Full Stack Developer',
+  'Jan 2024 - Present',
+  'Brief description...',
+  'Detailed description...',
+  '[{"title":"Feature 1","desc":"Description"}]',  -- JSON array
+  '["React","Node.js","MongoDB"]',                  -- JSON array
+  '{"github":["https://github.com/..."],"demo":"https://..."}',  -- JSON object
+  0,                                                 -- Boolean: 0 or 1
+  'Project Group'                                    -- Optional
+);
+```
+
+#### Option 2: Update Data Files and Re-migrate (Development)
+
+1. Edit `data/projects.ts` and add your project to the array
+2. Re-run the migration script:
+   ```bash
+   npm run migrate
+   ```
+
+**Note:** The migration script uses `INSERT OR REPLACE`, so it will update existing projects with the same ID.
+
+### API Usage
+
+You can also add projects via the API routes (you may need to create POST endpoints):
 
 ```typescript
-{
-  id: "my-project",
-  title: "My Project",
-  date: "2024",
-  role: "Full Stack Developer",
-  timeline: "Jan 2024 - Present",
-  summary: "Brief description...",
-  description: "Detailed description...",
-  highlights: [...],
-  technologies: [...],
-  links: {
-    github: ["https://github.com/..."],
-    demo: "https://..."
-  }
-}
+// Example for future enhancement
+const response = await fetch('/api/projects', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(projectData)
+});
 ```
 
 ## 🚀 Deployment
