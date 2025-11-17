@@ -44,3 +44,8 @@ next-env.d.ts
 # cloudflare
 .wrangler
 .dev.vars
+
+# local database
+local.db
+local.db-shm
+local.db-wal

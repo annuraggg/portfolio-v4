@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getD1Database } from '@/lib/db/d1-client';
+import { queryFirst, execute } from '@/lib/db/turso-client';
 
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export async function POST(
   request: NextRequest,
@@ -28,14 +28,10 @@ export async function POST(
     }
 
     try {
-      const db = getD1Database();
-      
-      await db
-        .prepare(
-          'INSERT INTO ratings (project_id, rating, user_identifier) VALUES (?, ?, ?) ON CONFLICT(project_id, user_identifier) DO UPDATE SET rating = excluded.rating'
-        )
-        .bind(projectId, rating, userIdentifier)
-        .run();
+      await execute(
+        'INSERT INTO ratings (project_id, rating, user_identifier) VALUES (?, ?, ?) ON CONFLICT(project_id, user_identifier) DO UPDATE SET rating = excluded.rating',
+        [projectId, rating, userIdentifier]
+      );
 
       return NextResponse.json({ success: true });
     } catch (error) {
@@ -62,14 +58,10 @@ export async function GET(
     const { projectId } = await context.params;
 
     try {
-      const db = getD1Database();
-      
-      const result = await db
-        .prepare(
-          'SELECT COUNT(*) as total_ratings, AVG(rating) as average_rating FROM ratings WHERE project_id = ?'
-        )
-        .bind(projectId)
-        .first<{ total_ratings: number; average_rating: number }>();
+      const result = await queryFirst<{ total_ratings: number; average_rating: number }>(
+        'SELECT COUNT(*) as total_ratings, AVG(rating) as average_rating FROM ratings WHERE project_id = ?',
+        [projectId]
+      );
 
       if (!result || result.total_ratings === 0) {
         return NextResponse.json({
