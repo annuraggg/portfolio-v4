@@ -11,6 +11,14 @@ declare global {
       NEXT_PUBLIC_EMAILJS_PUBLIC_KEY?: string;
     }
   }
+
+  // Cloudflare D1 binding types
+  interface Env {
+    DB: D1Database;
+  }
+
+  // Make DB available globally (for wrangler dev)
+  var DB: D1Database | undefined;
 }
 
 export {};
