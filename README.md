@@ -195,7 +195,7 @@ The project uses ConfigCat for feature flag management. All features work withou
 To set up feature flags:
 
 1. Create a free account at [ConfigCat](https://app.configcat.com)
-2. Follow the setup guide in [lib/config/README.md](./lib/config/README.md)
+2. See [FEATURE_FLAGS.md](./FEATURE_FLAGS.md) for the complete list of flags and setup instructions
 
 Available feature flags:
 - `enableProjectRatings` - Project rating system
@@ -221,10 +221,9 @@ portfolio-v4/
 │   ├── ratings/          # Rating components
 │   └── ui/               # UI components
 ├── lib/                   # Utilities and configurations
-│   ├── config/           # Feature flags (ConfigCat)
-│   └── db/               # Database utilities
+│   ├── config/           # Feature flags configuration
+│   └── db/               # Database utilities (D1 client)
 ├── data/                  # Static data (projects, skills, etc.)
-├── db/                    # Database migrations and docs
 └── public/                # Static assets
 ```
 
