@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { queryFirst } from '@/lib/db/turso-client';
 
-export const runtime = 'nodejs';
-
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ projectId: string }> }

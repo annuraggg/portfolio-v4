@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export const runtime = 'nodejs';
-
 export async function GET(
   request: NextRequest,
   context: { params: Promise<{ projectId: string }> }
@@ -9,7 +7,6 @@ export async function GET(
   try {
     const { projectId } = await context.params;
     
-    // Redirect to the main ratings endpoint which returns stats
     const url = new URL(request.url);
     const baseUrl = `${url.protocol}//${url.host}`;
     const response = await fetch(
