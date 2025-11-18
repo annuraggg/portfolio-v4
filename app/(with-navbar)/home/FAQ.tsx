@@ -4,10 +4,8 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   ChevronDown,
   Code,
-  Cloud,
   Smartphone,
   Monitor,
-  Shield,
   Clock,
 } from "lucide-react";
 
@@ -26,40 +24,28 @@ const FAQ = () => {
 
   const faqData = [
     {
-      question: "What full-stack development services do you offer?",
+      question: "What services do you offer?",
       answer:
-        "I specialize in end-to-end web development using modern technologies like React, Node.js, Python, and cloud platforms. My services include frontend development (React, Next.js, TypeScript), backend development (Node.js, Express, FastAPI, Django), database design (PostgreSQL, MongoDB, Redis), cloud deployment (AWS, Google Cloud, Azure), DevOps automation, API development, and mobile-responsive design. I handle everything from concept to deployment and ongoing maintenance.",
+        "I build modern web applications using React, Next.js, Node.js, and TypeScript. Services include frontend development, backend APIs, database design (PostgreSQL, MongoDB), cloud deployment, and mobile-responsive design.",
       icon: <Code className="w-5 h-5" />,
     },
     {
-      question: "What are your pricing and project rates?",
+      question: "What are your rates?",
       answer:
-        "My rates vary based on project complexity and timeline. For web applications, projects typically range from $3,000-$15,000+ for small to medium applications, $15,000-$40,000+ for complex full-stack applications. Simple landing pages start at $800-$2,500, while e-commerce solutions range from $5,000-$20,000+. I offer both project-based pricing and hourly rates ($50-$100/hour depending on the work). Contact me for a detailed quote based on your specific requirements.",
+        "As a fresh developer, I offer competitive rates: ₹500-800/hour for hourly work. Project-based pricing: Simple websites ₹15,000-30,000, Web applications ₹40,000-1,50,000, E-commerce sites ₹60,000-2,00,000. Contact me for a detailed quote based on your requirements.",
       icon: <Monitor className="w-5 h-5" />,
     },
     {
-      question: "How long does it take to complete a project?",
+      question: "How long does a project take?",
       answer:
-        "Timeline depends on project scope and complexity. A simple landing page takes 1-2 weeks, a basic web application takes 3-6 weeks, complex full-stack applications take 2-4 months, and enterprise-level solutions can take 4-6 months. For MVPs, I can typically deliver a working product in 3-8 weeks. I provide detailed project timelines during our initial consultation and keep you updated throughout the development process.",
+        "Timeline varies by complexity: Landing pages take 1-2 weeks, basic web apps 3-6 weeks, and complex applications 2-3 months. I provide detailed timelines during consultation and keep you updated throughout.",
       icon: <Clock className="w-5 h-5" />,
     },
     {
-      question: "What is your experience with cloud technologies?",
+      question: "Do you work on mobile apps?",
       answer:
-        "I have 5+ years of experience with major cloud platforms including AWS, Google Cloud Platform, and Microsoft Azure. I'm proficient in containerization with Docker, orchestration with Kubernetes, CI/CD pipelines, serverless architecture, database management (both SQL and NoSQL), monitoring and logging, security best practices, and cost optimization. I can help migrate existing applications to the cloud or build cloud-native solutions from scratch.",
-      icon: <Cloud className="w-5 h-5" />,
-    },
-    {
-      question: "Do you work on mobile applications?",
-      answer:
-        "Yes, I develop mobile applications using React Native for cross-platform solutions and Progressive Web Apps (PWAs) for web-based mobile experiences. I also create responsive web applications that work seamlessly across all devices. For native development, I collaborate with specialized mobile developers when needed. My focus is on creating mobile-first designs that provide excellent user experiences across all screen sizes.",
+        "Yes, I develop cross-platform mobile apps using React Native and create Progressive Web Apps (PWAs). I focus on responsive designs that work seamlessly across all devices.",
       icon: <Smartphone className="w-5 h-5" />,
-    },
-    {
-      question: "Can you sign an NDA and ensure project confidentiality?",
-      answer:
-        "Absolutely! Client confidentiality is a top priority in my practice. I'm happy to sign NDAs before discussing project details and maintain strict confidentiality throughout our engagement. I use secure development practices, encrypted communication channels, and follow industry best practices for data protection. Your intellectual property and sensitive information are completely safe with me.",
-      icon: <Shield className="w-5 h-5" />,
     },
   ];
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, X } from "lucide-react";
 import FileUpload from "@/components/admin/FileUpload";
+import MultiFileUpload from "@/components/admin/MultiFileUpload";
 
 interface Project {
   id?: string;
@@ -347,16 +348,17 @@ export default function ProjectsManagementPage() {
               </div>
 
               <div>
-                <FileUpload
-                  label="Upload Screenshot"
+                <MultiFileUpload
+                  label="Upload Screenshots"
                   type="screenshot"
-                  onUpload={(url) => {
-                    const currentScreenshots = formData.screenshots || [];
+                  currentUrls={formData.screenshots || []}
+                  onUpload={(urls) => {
                     setFormData({
                       ...formData,
-                      screenshots: [...currentScreenshots, url],
+                      screenshots: urls.length > 0 ? urls : undefined,
                     });
                   }}
+                  maxFiles={10}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Or enter URLs manually (comma-separated):

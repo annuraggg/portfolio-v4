@@ -6,6 +6,9 @@
 import { NextResponse } from 'next/server';
 import { getAllProjects, getProjectsWithRatings } from '@/lib/db/projects';
 
+// Revalidate every 60 seconds for better performance
+export const revalidate = 60;
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
