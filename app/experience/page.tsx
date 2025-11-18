@@ -5,11 +5,14 @@ import Experience from "./Experience";
 import { CredentialItem } from "./CredentialItem";
 import { useFeatureFlag } from "configcat-react";
 import type { Credential } from "@/lib/db/credentials";
+import Loader from "@/components/Loader";
+import type { Experience as ExperienceType } from "@/lib/db/experience";
 
 const ExperiencePage = () => {
   const [credentials, setCredentials] = useState<Credential[]>([]);
+  const [experience, setExperience] = useState<ExperienceType[]>([]);
   const [loading, setLoading] = useState(true);
-  
+
   const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
     "enableexperience",
     true
@@ -18,14 +21,29 @@ const ExperiencePage = () => {
   useEffect(() => {
     async function fetchCredentials() {
       try {
-        const response = await fetch('/api/credentials');
+        const response = await fetch("/api/credentials");
         if (!response.ok) {
-          throw new Error('Failed to fetch credentials');
+          throw new Error("Failed to fetch credentials");
         }
         const data = await response.json();
         setCredentials(data);
       } catch (err) {
-        console.error('Error loading credentials:', err);
+        console.error("Error loading credentials:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function fetchExperience() {
+      try {
+        const response = await fetch("/api/experience");
+        if (!response.ok) {
+          throw new Error("Failed to fetch experience");
+        }
+        const data = await response.json();
+        setExperience(data);
+      } catch (err) {
+        console.error("Error loading experience:", err);
       } finally {
         setLoading(false);
       }
@@ -33,13 +51,14 @@ const ExperiencePage = () => {
 
     if (isFeatureEnabled && !isLoadingFlag) {
       fetchCredentials();
+      fetchExperience();
     }
   }, [isFeatureEnabled, isLoadingFlag]);
 
   if (isLoadingFlag || loading) {
     return (
-      <div className="pt-40 px-64 text-center">
-        <div className="animate-pulse">Loading...</div>
+      <div className="flex flex-col items-center justify-center w-full h-screen">
+        <Loader />
       </div>
     );
   }
@@ -64,7 +83,7 @@ const ExperiencePage = () => {
       </h1>
 
       <div>
-        <Experience />
+        <Experience experience={experience} />
       </div>
 
       <div className="my-20">

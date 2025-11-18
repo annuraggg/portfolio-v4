@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 import ProjectCard from "./ProjectCard";
 import { useFeatureFlag } from "configcat-react";
 import type { Project } from "@/lib/db/projects";
+import Loader from "@/components/Loader";
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  
+
   const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
     "enableprojects",
     true
@@ -18,14 +19,16 @@ const ProjectsPage = () => {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const response = await fetch('/api/projects');
+        const response = await fetch("/api/projects");
         if (!response.ok) {
-          throw new Error('Failed to fetch projects');
+          throw new Error("Failed to fetch projects");
         }
         const data = await response.json();
         setProjects(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load projects');
+        setError(
+          err instanceof Error ? err.message : "Failed to load projects"
+        );
       } finally {
         setLoading(false);
       }
@@ -38,8 +41,8 @@ const ProjectsPage = () => {
 
   if (isLoadingFlag || loading) {
     return (
-      <div className="pt-48 px-36 text-center">
-        <div className="animate-pulse">Loading...</div>
+      <div className="flex flex-col items-center justify-center w-full h-screen">
+        <Loader />
       </div>
     );
   }

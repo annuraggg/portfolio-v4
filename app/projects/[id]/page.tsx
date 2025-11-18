@@ -6,7 +6,6 @@ import Stats from "./Stats";
 import Highlights from "./Highlights";
 import TechStack from "./TechStack";
 import Screenshots from "./Screenshots";
-import RatingContainer from "./RatingContainer";
 import { getProjectById } from "@/lib/db/projects";
 
 interface ProjectProps {
@@ -29,7 +28,6 @@ const page = async ({ params }: ProjectProps) => {
       <Stats project={project} />
       <Highlights project={project} />
       <Screenshots project={project} />
-      <RatingContainer projectId={project.id} />
     </div>
   );
 };

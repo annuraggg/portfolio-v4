@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
+import { ExternalLink } from "lucide-react";
+import { useFeatureFlag } from "configcat-react";
 
 const Navbar = () => {
   const SCROLL_THRESHOLD = 100;
@@ -12,13 +14,37 @@ const Navbar = () => {
   const borderTimer = useRef<NodeJS.Timeout | null>(null);
   const textTimer = useRef<NodeJS.Timeout | null>(null);
 
+  const { value: isExperienceEnabled, loading: isExperienceLoading } =
+    useFeatureFlag("enableexperience", true);
+
+  const { value: isProjectsEnabled, loading: isProjectsLoading } =
+    useFeatureFlag("enableprojects", true);
+
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Projects", path: "/projects" },
-    { name: "Experience", path: "/experience" },
-    { name: "Contact", path: "/contact" },
-    { name: "Blog", path: "https://blog.anuragsawant.in" },
-    { name: "Resume", path: "/documents/resume.pdf" },
+    { name: "Home", path: "/", enabled: true },
+    {
+      name: "Projects",
+      path: "/projects",
+      enabled: isProjectsEnabled && !isProjectsLoading,
+    },
+    {
+      name: "Experience",
+      path: "/experience",
+      enabled: isExperienceEnabled && !isExperienceLoading,
+    },
+    { name: "Contact", path: "/contact", enabled: true },
+    {
+      name: "Blog",
+      path: "https://blog.anuragsawant.in",
+      external: true,
+      enabled: true,
+    },
+    {
+      name: "Resume",
+      path: "/documents/resume.pdf",
+      external: true,
+      enabled: true,
+    },
   ];
 
   useEffect(() => {
@@ -92,16 +118,21 @@ const Navbar = () => {
 
       {/* Navigation */}
       <div className="flex items-center gap-10">
-        <div className="flex gap-20">
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.path}
-              className="text-md font-semibold hover:text-accent transition-colors duration-500"
-            >
-              {item.name}
-            </Link>
-          ))}
+        <div className="flex gap-14">
+          {navItems
+            .filter((item) => item.enabled)
+            .map((item) => (
+              <Link
+                key={item.name}
+                href={item.path}
+                className="text-md font-semibold hover:text-accent transition-colors duration-500"
+              >
+                {item.external && (
+                  <ExternalLink className="inline-block mb-1 mr-2" size={14} />
+                )}
+                {item.name}
+              </Link>
+            ))}
 
           <AnimatedThemeToggler />
         </div>
