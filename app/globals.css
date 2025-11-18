@@ -374,3 +374,28 @@ body {
 .loader-square:nth-of-type(7) {
   animation-delay: -10s;
 }
+
+/* Smooth, thin, theme-aware scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Firefox */
+* {
+  scrollbar-color: var(--border) var(--background);
+  scrollbar-width: thin;
+}

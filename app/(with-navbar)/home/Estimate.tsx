@@ -6,7 +6,7 @@ import Calculator from "./Calculator";
 
 const Estimate = () => {
   return (
-    <div className="relative h-[400px] sm:h-[500px] w-full overflow-hidden rounded-lg border mx-4 sm:mx-6 md:mx-8">
+    <div className="relative h-[400px] sm:h-[500px]  overflow-hidden rounded-lg border mx-4 sm:mx-6 md:mx-8 max-w-screen">
       <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 px-4 sm:px-6 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">
           Estimate Project Time
