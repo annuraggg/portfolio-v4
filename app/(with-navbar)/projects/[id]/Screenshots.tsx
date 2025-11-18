@@ -15,7 +15,7 @@ const Screenshots = ({ project }: { project: Project }) => {
         {project.screenshots?.map((screenshot, index) => (
           <div key={index} className="w-full sm:w-auto">
             <Image
-              src={screenshot}
+              src={process.env.NEXT_PUBLIC_R2_PUBLIC_URL! + screenshot}
               alt={`Screenshot ${index + 1}`}
               className="w-full sm:w-[300px] md:w-[400px] lg:w-[500px] h-auto"
               width={1000}

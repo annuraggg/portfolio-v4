@@ -1,5 +1,5 @@
 import { Option } from "@/components/DirectionAwareSelect";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Select from "@/components/DirectionAwareSelect";
 import DirectionHoverButton from "@/components/DirectionAwareButton";
 
@@ -63,21 +63,9 @@ type Estimate = {
   hoursPerWeek: number;
 };
 
-/**
- * Realistic-ish single-dev estimates:
- * - platform base hours are per-platform realistic baselines (smaller for web-first).
- * - features map to per-feature hours reflecting typical single-dev implementation time
- *   (design, frontend, backend integration).
- * - industry multipliers add modest overhead for regulated/complex domains.
- * - conservative buffers are applied: QA/polish + single-dev overhead + ops.
- *
- * The estimator intentionally returns modest values so typical combinations naturally
- * fall well under 8 months for a single developer working ~6 productive hours/day.
- */
-
 const PLATFORM_BASE_HOURS: Record<string, number> = {
-  web: 40, // web-first baseline
-  ios: 60, // native effort, UI + platform specifics
+  web: 40,
+  ios: 60,
   android: 60,
 };
 
@@ -119,41 +107,21 @@ function estimateProject(
   platforms: string[],
   features: string[]
 ): Estimate {
-  const hoursPerDay = 6; // productive hours/day assumption
-  // sum platform baseline hours
+  const hoursPerDay = 6;
   const platformHours = platforms.reduce(
     (sum, p) => sum + (PLATFORM_BASE_HOURS[p] ?? 40),
     0
   );
-
-  // sum per-feature hours
   const featureHours = features.reduce(
     (sum, f) => sum + (FEATURE_HOURS[f] ?? 12),
     0
   );
-
-  // industry multiplier
   const industryMult = INDUSTRY_MULTIPLIER[industry] ?? 1.0;
-
-  // raw work
   const rawHours = (platformHours + featureHours) * industryMult;
-
-  // buffers
-  const qaPolish = 0.18; // 18% for polish and bugfix cycles
-  const singleDevOverhead = 0.08; // 8% context switching / planning
-  const ops = 0.04; // 4% deployment/infra setup
-  const totalMultiplier = 1 + qaPolish + singleDevOverhead + ops; // ~1.30
-
-  const finalHours = Math.ceil(rawHours * totalMultiplier);
-
+  const finalHours = Math.ceil(rawHours * 1.3);
   const days = Math.ceil(finalHours / hoursPerDay);
-  const hoursPerWeek = hoursPerDay * 5; // 30 hrs/week assumption
-
-  return {
-    hours: finalHours,
-    days,
-    hoursPerWeek,
-  };
+  const hoursPerWeek = hoursPerDay * 5;
+  return { hours: finalHours, days, hoursPerWeek };
 }
 
 const Calculator = () => {
@@ -163,8 +131,9 @@ const Calculator = () => {
   const [estimate, setEstimate] = useState<Estimate | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const resultRef = useRef<HTMLDivElement | null>(null);
+
   const handleCalculate = () => {
-    // require all three: industry, at least one platform, at least one feature
     if (!industry) {
       setError("Please select an industry.");
       setEstimate(null);
@@ -180,11 +149,15 @@ const Calculator = () => {
       setEstimate(null);
       return;
     }
-
-    // clear error and compute
     setError(null);
     const est = estimateProject(industry, platform, featureSet);
     setEstimate(est);
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }, 80);
   };
 
   const handleReset = () => {
@@ -195,11 +168,17 @@ const Calculator = () => {
     setError(null);
   };
 
+  const handleClose = () => {
+    (document.getElementById("my_modal_1") as HTMLDialogElement)?.close();
+  };
+
   return (
     <dialog id="my_modal_1" className="modal">
-      <div className="modal-box bg-background w-full max-w-[95vw] sm:max-w-[85vw] md:max-w-[75vw] lg:max-w-[60vw] min-h-screen py-12 sm:py-16 md:py-20 flex justify-center">
+      <div className="modal-box bg-background w-full max-w-[95vw] sm:max-w-[85vw] md:max-w-[75vw] lg:max-w-[100vw] min-h-screen py-12 sm:py-16 md:py-20 flex justify-center">
         <div className="w-full px-4 sm:px-6">
-          <h3 className="text-sm sm:text-md font-medium">Calculate project time</h3>
+          <h3 className="text-sm sm:text-md font-medium">
+            Calculate project time
+          </h3>
 
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -214,11 +193,11 @@ const Calculator = () => {
             <Select
               items={INDUSTRIES}
               value={industry}
-              onChange={(value) => {
-                setIndustry(value as string | null);
-              }}
+              onChange={(v) => setIndustry(v as string | null)}
               buttonClassName="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
-              renderOption={(opt) => <span className="px-2 sm:px-3">{opt.label}</span>}
+              renderOption={(opt) => (
+                <span className="px-2 sm:px-3">{opt.label}</span>
+              )}
             />
           </div>
 
@@ -229,11 +208,11 @@ const Calculator = () => {
             <Select
               items={PLATFORMS}
               value={platform}
-              onChange={(value) => {
-                setPlatform((value as string[] | null) ?? []);
-              }}
+              onChange={(v) => setPlatform((v as string[] | null) ?? [])}
               buttonClassName="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
-              renderOption={(opt) => <span className="px-2 sm:px-3">{opt.label}</span>}
+              renderOption={(opt) => (
+                <span className="px-2 sm:px-3">{opt.label}</span>
+              )}
               multiple
             />
           </div>
@@ -245,11 +224,11 @@ const Calculator = () => {
             <Select
               items={FEATURES_OPTIONS}
               value={featureSet}
-              onChange={(value) => {
-                setFeatureSet((value as string[] | null) ?? []);
-              }}
+              onChange={(v) => setFeatureSet((v as string[] | null) ?? [])}
               buttonClassName="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
-              renderOption={(opt) => <span className="px-2 sm:px-3">{opt.label}</span>}
+              renderOption={(opt) => (
+                <span className="px-2 sm:px-3">{opt.label}</span>
+              )}
               multiple
             />
           </div>
@@ -270,24 +249,37 @@ const Calculator = () => {
             >
               Reset
             </DirectionHoverButton>
+
+            <DirectionHoverButton
+              className="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
+              onClick={handleClose}
+            >
+              Close
+            </DirectionHoverButton>
           </div>
 
           {error && (
             <div className="mt-4" role="alert" aria-live="assertive">
-              <div className="text-xl sm:text-2xl md:text-3xl text-center pb-8 sm:pb-10 text-red-500 font-medium">
+              <div className="text-xl sm:text-2xl md:text-3xl text-center pb-8 sm:pb-10 font-medium">
                 {error}
               </div>
             </div>
           )}
 
           {estimate && (
-            <div className="pb-12 sm:pb-16 md:pb-20">
+            <div ref={resultRef} className="pb-12 sm:pb-16 md:pb-20">
               <div style={{ textAlign: "center" }}>
-                <div className="text-4xl sm:text-5xl md:text-6xl font-bold" aria-live="polite">
+                <div
+                  className="text-4xl sm:text-5xl md:text-6xl font-bold"
+                  aria-live="polite"
+                >
                   {estimate.days} days
                 </div>
                 <div className="mt-2 text-base sm:text-lg">
                   {estimate.hoursPerWeek} hrs / week
+                </div>
+                <div className="mt-6 text-sm opacity-70">
+                  Press ESC to close
                 </div>
               </div>
             </div>

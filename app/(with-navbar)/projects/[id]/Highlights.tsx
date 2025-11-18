@@ -14,7 +14,7 @@ const Highlights = ({ project }: { project: Project }) => {
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <div className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64">
+      <div className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-40">
         <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-accent mb-12 sm:mb-16 md:mb-20">Highlights</h2>
         <div className="mt-5 space-y-3 flex flex-wrap gap-8 sm:gap-12 md:gap-16 lg:gap-20">
           {project.highlights.map((highlight, index) => (

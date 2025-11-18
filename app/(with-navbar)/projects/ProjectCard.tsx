@@ -21,7 +21,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
       </div>
 
       <div className="w-full lg:w-[50vw] h-full">
-        <Safari url={project.links?.demo} imageSrc={project.cover} />
+        <Safari url={project.links?.demo} imageSrc={process.env.NEXT_PUBLIC_R2_PUBLIC_URL! + project.cover} />
       </div>
     </div>
   );
