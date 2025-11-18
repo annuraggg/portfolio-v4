@@ -2,6 +2,7 @@ import DiscordProfile from "./DiscordProfile";
 import Image from "next/image";
 import Link from "next/link";
 import ContactForm from "./ContactForm";
+import { getAssetUrl } from "@/lib/utils/assets";
 
 export const metadata = {
   title: "Contact",
@@ -40,7 +41,7 @@ export default async function ContactPage() {
 
       <div className="flex items-center justify-center mt-8">
         <Image
-          src="/name.png"
+          src={getAssetUrl("name.png")}
           alt="Name wordmark"
           width={500} 
           height={500}

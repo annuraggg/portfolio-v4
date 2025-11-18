@@ -12,6 +12,7 @@
     "create-admin": "tsx scripts/create-admin.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.933.0",
     "@emailjs/browser": "^4.4.1",
     "@libsql/client": "^0.14.0",
     "@radix-ui/react-separator": "^1.1.7",

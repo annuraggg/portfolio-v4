@@ -347,7 +347,20 @@ export default function ProjectsManagementPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Screenshots (comma-separated URLs)</label>
+                <FileUpload
+                  label="Upload Screenshot"
+                  type="screenshot"
+                  onUpload={(url) => {
+                    const currentScreenshots = formData.screenshots || [];
+                    setFormData({
+                      ...formData,
+                      screenshots: [...currentScreenshots, url],
+                    });
+                  }}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Or enter URLs manually (comma-separated):
+                </p>
                 <input
                   type="text"
                   value={formData.screenshots?.join(", ") || ""}
@@ -359,7 +372,8 @@ export default function ProjectsManagementPage() {
                         : undefined,
                     })
                   }
-                  className="w-full px-3 py-2 border rounded-md bg-background"
+                  className="w-full px-3 py-2 border rounded-md bg-background mt-1"
+                  placeholder="https://..."
                 />
               </div>
 

@@ -5,6 +5,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 import { ExternalLink, Menu, X } from "lucide-react";
 import { useFeatureFlag } from "configcat-react";
+import { getAssetUrl } from "@/lib/utils/assets";
 
 const Navbar = () => {
   const SCROLL_THRESHOLD = 100;
@@ -42,7 +43,7 @@ const Navbar = () => {
     },
     {
       name: "Resume",
-      path: "/documents/resume.pdf",
+      path: getAssetUrl("documents/resume.pdf"),
       external: true,
       enabled: true,
     },
@@ -99,7 +100,7 @@ const Navbar = () => {
           }`}
         >
           <Image
-            src="/logo.png"
+            src={getAssetUrl("logo.png")}
             width={100}
             height={100}
             alt="Logo"

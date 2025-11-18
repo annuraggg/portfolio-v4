@@ -4,9 +4,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/helpers';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-import { existsSync } from 'fs';
+import { uploadToR2 } from '@/lib/storage/r2-client';
 
 export async function POST(request: NextRequest) {
   const auth = await requireAuth();
@@ -53,7 +51,7 @@ export async function POST(request: NextRequest) {
     const extension = file.name.split('.').pop();
     const filename = `${timestamp}-${randomString}.${extension}`;
 
-    // Determine upload directory
+    // Determine upload directory (maintaining same structure as before)
     let uploadDir = 'general';
     if (type === 'cover') {
       uploadDir = 'covers';
@@ -61,18 +59,9 @@ export async function POST(request: NextRequest) {
       uploadDir = 'screenshots';
     }
 
-    const uploadPath = join(process.cwd(), 'public', 'uploads', uploadDir);
-    
-    // Create directory if it doesn't exist
-    if (!existsSync(uploadPath)) {
-      await mkdir(uploadPath, { recursive: true });
-    }
-
-    const filePath = join(uploadPath, filename);
-    await writeFile(filePath, buffer);
-
-    // Return public URL
-    const publicUrl = `/uploads/${uploadDir}/${filename}`;
+    // Upload to R2 with same path structure
+    const r2Key = `uploads/${uploadDir}/${filename}`;
+    const publicUrl = await uploadToR2(buffer, r2Key, file.type);
 
     return NextResponse.json({ 
       success: true, 
