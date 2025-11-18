@@ -19,13 +19,13 @@ export async function middleware(request: NextRequest) {
     const token = request.cookies.get('admin-session')?.value;
 
     if (!token) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+      return NextResponse.redirect(new URL('/admin/login', request.nextUrl));
     }
 
     const session = await verifySession(token);
 
     if (!session) {
-      return NextResponse.redirect(new URL('/admin/login', request.url));
+      return NextResponse.redirect(new URL('/admin/login', request.nextUrl));
     }
   }
 

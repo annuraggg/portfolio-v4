@@ -8,6 +8,8 @@ import { getAllProjects, getProjectsWithRatings } from '@/lib/db/projects';
 
 // Revalidate every 60 seconds for better performance
 export const revalidate = 60;
+export const dynamic = "force-dynamic";
+
 
 export async function GET(request: Request) {
   try {
