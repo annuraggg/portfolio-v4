@@ -52,7 +52,7 @@ export async function createExperience(experience: Omit<Experience, 'id'>): Prom
  */
 export async function updateExperience(id: number, experience: Partial<Experience>): Promise<void> {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: (string | number)[] = [];
 
   if (experience.title !== undefined) {
     fields.push('title = ?');

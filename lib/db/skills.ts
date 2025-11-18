@@ -46,7 +46,7 @@ export async function createSkill(skill: Omit<Skill, 'id'>): Promise<number> {
  */
 export async function updateSkill(id: number, skill: Partial<Skill>): Promise<void> {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: (string | null)[] = [];
 
   if (skill.title !== undefined) {
     fields.push('title = ?');

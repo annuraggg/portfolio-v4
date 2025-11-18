@@ -195,7 +195,7 @@ export async function createProject(project: Omit<Project, 'id'>): Promise<strin
 
 export async function updateProject(id: string, project: Partial<Project>): Promise<void> {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: (string | number | null)[] = [];
 
   if (project.title !== undefined) {
     fields.push('title = ?');

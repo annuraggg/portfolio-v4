@@ -52,7 +52,7 @@ export async function createCredential(credential: Omit<Credential, 'id'>): Prom
  */
 export async function updateCredential(id: number, credential: Partial<Credential>): Promise<void> {
   const fields: string[] = [];
-  const values: any[] = [];
+  const values: (string | number)[] = [];
 
   if (credential.title !== undefined) {
     fields.push('title = ?');

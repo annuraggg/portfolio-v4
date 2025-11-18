@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { ExternalLink, Flag, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function FeatureFlagsPage() {
-  const [flags, setFlags] = useState([
+  const flags = [
     { key: "enableprojectratings", name: "Project Ratings", description: "Allow users to rate projects" },
     { key: "enablecontactform", name: "Contact Form", description: "Enable the contact form" },
     { key: "enableprojects", name: "Projects Section", description: "Show projects section on homepage" },
@@ -13,7 +12,7 @@ export default function FeatureFlagsPage() {
     { key: "enablethemeswitcher", name: "Theme Switcher", description: "Enable dark/light theme switcher" },
     { key: "enablemousefollower", name: "Mouse Follower", description: "Enable custom mouse follower effect" },
     { key: "showdevelopmentprojects", name: "Development Projects", description: "Show projects marked as in development" },
-  ]);
+  ];
 
   return (
     <div>
