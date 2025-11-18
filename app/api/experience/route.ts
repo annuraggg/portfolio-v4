@@ -6,6 +6,9 @@
 import { NextResponse } from 'next/server';
 import { getAllExperience } from '@/lib/db/experience';
 
+// Revalidate every 60 seconds for better performance
+export const revalidate = 60;
+
 export async function GET() {
   try {
     const experience = await getAllExperience();
