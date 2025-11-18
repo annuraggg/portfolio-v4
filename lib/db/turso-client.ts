@@ -3,7 +3,7 @@
  * Provides database access for both remote Turso and local development
  */
 
-import { createClient, Client, InValue } from '@libsql/client';
+import { createClient, Client, InValue } from "@libsql/client";
 
 let dbClient: Client | null = null;
 
@@ -19,27 +19,18 @@ export function getTursoClient(): Client {
   const url = process.env.TURSO_DATABASE_URL;
   const authToken = process.env.TURSO_AUTH_TOKEN;
 
-  // For local development, allow file-based SQLite
   if (!url) {
-    console.warn('TURSO_DATABASE_URL not set, using local SQLite file');
-    dbClient = createClient({
-      url: 'file:local.db',
-    });
-    return dbClient;
+    throw new Error("TURSO_DATABASE_URL is not defined in environment variables");
   }
 
-  // For remote Turso database
   dbClient = createClient({
     url,
-    authToken: authToken || '',
+    authToken: authToken || "",
   });
 
   return dbClient;
 }
 
-/**
- * Execute a query and return the first result
- */
 export async function queryFirst<T = unknown>(
   sql: string,
   args: InValue[] = []
@@ -57,9 +48,6 @@ export async function queryFirst<T = unknown>(
   return result.rows[0] as T;
 }
 
-/**
- * Execute a query and return all results
- */
 export async function queryAll<T = unknown>(
   sql: string,
   args: InValue[] = []
@@ -73,9 +61,6 @@ export async function queryAll<T = unknown>(
   return result.rows as T[];
 }
 
-/**
- * Execute a query without expecting results (INSERT, UPDATE, DELETE)
- */
 export async function execute(
   sql: string,
   args: InValue[] = []
@@ -92,13 +77,9 @@ export async function execute(
   };
 }
 
-/**
- * Initialize the database schema
- * Call this on first run or for migrations
- */
 export async function initializeSchema(): Promise<void> {
   const client = getTursoClient();
-  
+
   // Create projects table
   await client.execute(`
     CREATE TABLE IF NOT EXISTS projects (
@@ -195,7 +176,7 @@ export async function initializeSchema(): Promise<void> {
     CREATE INDEX IF NOT EXISTS idx_credentials_date ON credentials(date)
   `);
 
-  console.log('Database schema initialized successfully');
+  console.log("Database schema initialized successfully");
 }
 
 export type { Client };
