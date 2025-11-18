@@ -21,7 +21,7 @@ const page = async ({ params }: ProjectProps) => {
   }
 
   return (
-    <div className="pt-40 pb-20 overflow-hidden">
+    <div className="pt-28 sm:pt-32 md:pt-40 pb-12 sm:pb-16 md:pb-20 overflow-hidden px-4 sm:px-6 md:px-8">
       <Hero project={project} />
       <Idea project={project} />
       <TechStack project={project} />

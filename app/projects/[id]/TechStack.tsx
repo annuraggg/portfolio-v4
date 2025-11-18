@@ -24,19 +24,21 @@ const TechStack = async ({ project }: { project: Project }) => {
 
   return (
     <div>
-      <div className="px-50">
-        <div className="flex justify-between items-center">
-          <IconCloud images={images} />
+      <div className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-50">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-12 lg:gap-20">
+          <div className="w-full lg:w-auto flex justify-center">
+            <IconCloud images={images} />
+          </div>
 
-          <div>
-            <h2 className="text-6xl font-semibold text-accent mb-7">
+          <div className="w-full lg:w-auto">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold text-accent mb-5 sm:mb-7 text-center lg:text-left">
               Tech Stack
             </h2>
-            <div className="flex flex-wrap gap-7 items-center">
+            <div className="flex flex-wrap gap-4 sm:gap-5 md:gap-7 items-center justify-center lg:justify-start">
               {project.technologies.map((tech, index) => (
                 <div
                   key={index}
-                  className="text-xl font-medium hover:text-accent transition-all"
+                  className="text-base sm:text-lg md:text-xl font-medium hover:text-accent transition-all"
                 >
                   {tech}
                 </div>
