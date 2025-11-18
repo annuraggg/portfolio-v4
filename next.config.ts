@@ -13,8 +13,11 @@ const nextConfig: NextConfig = {
         hostname: '**.r2.cloudflarestorage.com',
       }
     ],
+    formats: ['image/webp', 'image/avif'],
   },
   serverExternalPackages: ['@libsql/client'],
+  compress: true,
+  poweredByHeader: false,
 };
 
 export default nextConfig;
