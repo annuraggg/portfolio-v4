@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import MouseFollower from "@/components/MouseFollower";
-import Footer from "@/components/Footer";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ConfigCatProvider } from "configcat-react";
 import { Toaster } from "sonner";
@@ -82,7 +79,9 @@ export default function RootLayout({
   const CONFIGCAT_SDK_KEY = process.env.NEXT_PUBLIC_CONFIGCAT_SDK_KEY;
 
   if (!CONFIGCAT_SDK_KEY) {
-    throw new Error("ConfigCat SDK key is not defined in environment variables.");
+    throw new Error(
+      "ConfigCat SDK key is not defined in environment variables."
+    );
   }
 
   return (
@@ -97,10 +96,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <ConfigCatProvider sdkKey={CONFIGCAT_SDK_KEY}>
-            <Navbar />
-            <MouseFollower />
             {children}
-            <Footer />
             <Toaster position="bottom-right" />
           </ConfigCatProvider>
         </ThemeProvider>
