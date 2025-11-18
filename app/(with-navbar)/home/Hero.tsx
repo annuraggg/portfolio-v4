@@ -4,11 +4,10 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { Highlighter } from "@/components/ui/highlighter";
 import DockComponent from "./Socials";
-import { getAssetUrl } from "@/lib/utils/assets";
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
-  const waveUrl = getAssetUrl("wave.svg");
+  const waveUrl = "/wave.svg";
 
   return (
     <div className="min-h-screen flex flex-col justify-between pb-10 px-4 sm:px-6 md:px-8">
