@@ -155,3 +155,122 @@ export async function getProjectWithRating(id: string): Promise<(Project & {
     totalRatings: row.total_ratings !== null ? row.total_ratings : undefined,
   };
 }
+
+/**
+ * Admin functions for managing projects
+ */
+import { execute } from './turso-client';
+
+export async function createProject(project: Omit<Project, 'id'>): Promise<string> {
+  const id = `project-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  
+  await execute(
+    `INSERT INTO projects (
+      id, title, date, cover, role, timeline, waiter, summary, description,
+      problem, solution, highlights, technologies, screenshots, links, development, group_name
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    [
+      id,
+      project.title,
+      project.date,
+      project.cover || null,
+      project.role,
+      project.timeline,
+      project.waiter || null,
+      project.summary,
+      project.description,
+      project.problem || null,
+      project.solution || null,
+      JSON.stringify(project.highlights),
+      JSON.stringify(project.technologies),
+      project.screenshots ? JSON.stringify(project.screenshots) : null,
+      project.links ? JSON.stringify(project.links) : null,
+      project.development ? 1 : 0,
+      project.group || null,
+    ]
+  );
+
+  return id;
+}
+
+export async function updateProject(id: string, project: Partial<Project>): Promise<void> {
+  const fields: string[] = [];
+  const values: any[] = [];
+
+  if (project.title !== undefined) {
+    fields.push('title = ?');
+    values.push(project.title);
+  }
+  if (project.date !== undefined) {
+    fields.push('date = ?');
+    values.push(project.date);
+  }
+  if (project.cover !== undefined) {
+    fields.push('cover = ?');
+    values.push(project.cover || null);
+  }
+  if (project.role !== undefined) {
+    fields.push('role = ?');
+    values.push(project.role);
+  }
+  if (project.timeline !== undefined) {
+    fields.push('timeline = ?');
+    values.push(project.timeline);
+  }
+  if (project.waiter !== undefined) {
+    fields.push('waiter = ?');
+    values.push(project.waiter || null);
+  }
+  if (project.summary !== undefined) {
+    fields.push('summary = ?');
+    values.push(project.summary);
+  }
+  if (project.description !== undefined) {
+    fields.push('description = ?');
+    values.push(project.description);
+  }
+  if (project.problem !== undefined) {
+    fields.push('problem = ?');
+    values.push(project.problem || null);
+  }
+  if (project.solution !== undefined) {
+    fields.push('solution = ?');
+    values.push(project.solution || null);
+  }
+  if (project.highlights !== undefined) {
+    fields.push('highlights = ?');
+    values.push(JSON.stringify(project.highlights));
+  }
+  if (project.technologies !== undefined) {
+    fields.push('technologies = ?');
+    values.push(JSON.stringify(project.technologies));
+  }
+  if (project.screenshots !== undefined) {
+    fields.push('screenshots = ?');
+    values.push(project.screenshots ? JSON.stringify(project.screenshots) : null);
+  }
+  if (project.links !== undefined) {
+    fields.push('links = ?');
+    values.push(project.links ? JSON.stringify(project.links) : null);
+  }
+  if (project.development !== undefined) {
+    fields.push('development = ?');
+    values.push(project.development ? 1 : 0);
+  }
+  if (project.group !== undefined) {
+    fields.push('group_name = ?');
+    values.push(project.group || null);
+  }
+
+  fields.push('updated_at = CURRENT_TIMESTAMP');
+  values.push(id);
+
+  await execute(
+    `UPDATE projects SET ${fields.join(', ')} WHERE id = ?`,
+    values
+  );
+}
+
+export async function deleteProject(id: string): Promise<void> {
+  await execute('DELETE FROM projects WHERE id = ?', [id]);
+}
