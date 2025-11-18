@@ -4,9 +4,11 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { Highlighter } from "@/components/ui/highlighter";
 import DockComponent from "./Socials";
+import { getAssetUrl } from "@/lib/utils/assets";
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const waveUrl = getAssetUrl("wave.svg");
 
   return (
     <div className="min-h-screen flex flex-col justify-between pb-10 px-4 sm:px-6 md:px-8">
@@ -46,9 +48,13 @@ const Hero = () => {
               </Highlighter>
             </div>
             <span
-              className={`absolute left-0 bottom-0 w-full h-[8px] sm:h-[10px] md:h-[12px] bg-[url('/wave.svg')] bg-[length:28px_12px] bg-repeat-x bg-bottom ${
+              className={`absolute left-0 bottom-0 w-full h-[8px] sm:h-[10px] md:h-[12px] bg-repeat-x bg-bottom ${
                 isHovered ? "animate-wave" : ""
               }`}
+              style={{
+                backgroundImage: `url('${waveUrl}')`,
+                backgroundSize: '28px 12px'
+              }}
             />
           </h2>
         </div>
