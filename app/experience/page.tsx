@@ -1,18 +1,42 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Experience from "./Experience";
-import { credentials } from "@/data/credentials";
 import { CredentialItem } from "./CredentialItem";
 import { useFeatureFlag } from "configcat-react";
+import type { Credential } from "@/lib/db/credentials";
 
 const ExperiencePage = () => {
+  const [credentials, setCredentials] = useState<Credential[]>([]);
+  const [loading, setLoading] = useState(true);
+  
   const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
     "enableexperience",
     true
   );
 
-  if (isLoadingFlag) {
+  useEffect(() => {
+    async function fetchCredentials() {
+      try {
+        const response = await fetch('/api/credentials');
+        if (!response.ok) {
+          throw new Error('Failed to fetch credentials');
+        }
+        const data = await response.json();
+        setCredentials(data);
+      } catch (err) {
+        console.error('Error loading credentials:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (isFeatureEnabled && !isLoadingFlag) {
+      fetchCredentials();
+    }
+  }, [isFeatureEnabled, isLoadingFlag]);
+
+  if (isLoadingFlag || loading) {
     return (
       <div className="pt-40 px-64 text-center">
         <div className="animate-pulse">Loading...</div>

@@ -1,4 +1,4 @@
-import { Project } from "@/data/projects";
+import { Project } from "@/lib/db/projects";
 import React from "react";
 import { IconCloud } from "@/components/ui/icon-cloud";
 

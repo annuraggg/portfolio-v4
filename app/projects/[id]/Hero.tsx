@@ -1,5 +1,5 @@
 "use client";
-import { Project } from "@/data/projects";
+import { Project } from "@/lib/db/projects";
 import React, { useEffect } from "react";
 import Links from "./Links";
 import { Safari } from "@/components/ui/safari";

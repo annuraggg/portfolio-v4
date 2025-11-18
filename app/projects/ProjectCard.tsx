@@ -1,6 +1,6 @@
 import DirectionAwareButton from "@/components/DirectionAwareButton";
 import { Safari } from "@/components/ui/safari";
-import { Project } from "@/data/projects";
+import { Project } from "@/lib/db/projects";
 import Link from "next/link";
 import React from "react";
 

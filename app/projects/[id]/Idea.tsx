@@ -1,5 +1,5 @@
 "use client";
-import { Project } from "@/data/projects";
+import { Project } from "@/lib/db/projects";
 import { useInView } from "motion/react";
 import React, { useRef } from "react";
 import { motion } from "framer-motion";

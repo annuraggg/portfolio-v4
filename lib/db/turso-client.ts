@@ -99,7 +99,32 @@ export async function execute(
 export async function initializeSchema(): Promise<void> {
   const client = getTursoClient();
   
-  // Create ratings table
+  // Create projects table
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS projects (
+      id TEXT PRIMARY KEY,
+      title TEXT NOT NULL,
+      date TEXT NOT NULL,
+      cover TEXT,
+      role TEXT NOT NULL,
+      timeline TEXT NOT NULL,
+      waiter TEXT,
+      summary TEXT NOT NULL,
+      description TEXT NOT NULL,
+      problem TEXT,
+      solution TEXT,
+      highlights TEXT NOT NULL,
+      technologies TEXT NOT NULL,
+      screenshots TEXT,
+      links TEXT,
+      development INTEGER DEFAULT 0,
+      group_name TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Create ratings table (with foreign key to projects)
   await client.execute(`
     CREATE TABLE IF NOT EXISTS ratings (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -107,7 +132,45 @@ export async function initializeSchema(): Promise<void> {
       rating INTEGER NOT NULL CHECK(rating >= 1 AND rating <= 5),
       user_identifier TEXT NOT NULL,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(project_id, user_identifier)
+      UNIQUE(project_id, user_identifier),
+      FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE
+    )
+  `);
+
+  // Create experience table
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS experience (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      date TEXT NOT NULL,
+      description TEXT NOT NULL,
+      role TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Create credentials table
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS credentials (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL,
+      date TEXT NOT NULL,
+      link TEXT NOT NULL,
+      organization TEXT NOT NULL,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+
+  // Create skills table
+  await client.execute(`
+    CREATE TABLE IF NOT EXISTS skills (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT NOT NULL UNIQUE,
+      progress TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
 
@@ -118,6 +181,18 @@ export async function initializeSchema(): Promise<void> {
 
   await client.execute(`
     CREATE INDEX IF NOT EXISTS idx_user_identifier ON ratings(project_id, user_identifier)
+  `);
+
+  await client.execute(`
+    CREATE INDEX IF NOT EXISTS idx_project_date ON projects(date)
+  `);
+
+  await client.execute(`
+    CREATE INDEX IF NOT EXISTS idx_experience_date ON experience(date)
+  `);
+
+  await client.execute(`
+    CREATE INDEX IF NOT EXISTS idx_credentials_date ON credentials(date)
   `);
 
   console.log('Database schema initialized successfully');
