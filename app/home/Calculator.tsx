@@ -197,9 +197,9 @@ const Calculator = () => {
 
   return (
     <dialog id="my_modal_1" className="modal">
-      <div className="modal-box bg-background min-w-screen min-h-screen py-20 flex justify-center">
-        <div className="max-w-[60vw]">
-          <h3 className="text-md font-medium">Calculate project time</h3>
+      <div className="modal-box bg-background w-full max-w-[95vw] sm:max-w-[85vw] md:max-w-[75vw] lg:max-w-[60vw] min-h-screen py-12 sm:py-16 md:py-20 flex justify-center">
+        <div className="w-full px-4 sm:px-6">
+          <h3 className="text-sm sm:text-md font-medium">Calculate project time</h3>
 
           <form method="dialog">
             <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
@@ -208,7 +208,7 @@ const Calculator = () => {
           </form>
 
           <div>
-            <p className="text-3xl font-medium my-5 mt-20">
+            <p className="text-xl sm:text-2xl md:text-3xl font-medium my-5 mt-12 sm:mt-16 md:mt-20">
               What&apos;s your business domain?
             </p>
             <Select
@@ -217,13 +217,13 @@ const Calculator = () => {
               onChange={(value) => {
                 setIndustry(value as string | null);
               }}
-              buttonClassName="px-6 py-3 rounded-full"
-              renderOption={(opt) => <span className="px-3">{opt.label}</span>}
+              buttonClassName="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
+              renderOption={(opt) => <span className="px-2 sm:px-3">{opt.label}</span>}
             />
           </div>
 
           <div>
-            <p className="text-3xl font-medium my-5 mt-20">
+            <p className="text-xl sm:text-2xl md:text-3xl font-medium my-5 mt-12 sm:mt-16 md:mt-20">
               Choose the platforms for your project
             </p>
             <Select
@@ -232,14 +232,14 @@ const Calculator = () => {
               onChange={(value) => {
                 setPlatform((value as string[] | null) ?? []);
               }}
-              buttonClassName="px-6 py-3 rounded-full"
-              renderOption={(opt) => <span className="px-3">{opt.label}</span>}
+              buttonClassName="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
+              renderOption={(opt) => <span className="px-2 sm:px-3">{opt.label}</span>}
               multiple
             />
           </div>
 
           <div>
-            <p className="text-3xl font-medium my-5 mt-20">
+            <p className="text-xl sm:text-2xl md:text-3xl font-medium my-5 mt-12 sm:mt-16 md:mt-20">
               What features should your app have?
             </p>
             <Select
@@ -248,24 +248,24 @@ const Calculator = () => {
               onChange={(value) => {
                 setFeatureSet((value as string[] | null) ?? []);
               }}
-              buttonClassName="px-6 py-3 rounded-full"
-              renderOption={(opt) => <span className="px-3">{opt.label}</span>}
+              buttonClassName="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
+              renderOption={(opt) => <span className="px-2 sm:px-3">{opt.label}</span>}
               multiple
             />
           </div>
 
-          <hr className="my-8" />
+          <hr className="my-6 sm:my-8" />
 
-          <div className="mt-10 flex gap-4 justify-end pb-10">
+          <div className="mt-6 sm:mt-8 md:mt-10 flex flex-col sm:flex-row gap-3 sm:gap-4 justify-end pb-10">
             <DirectionHoverButton
-              className="px-6 py-3 rounded-full"
+              className="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
               onClick={handleCalculate}
             >
               Calculate
             </DirectionHoverButton>
 
             <DirectionHoverButton
-              className="px-6 py-3 rounded-full"
+              className="px-4 sm:px-6 py-2 sm:py-3 rounded-full text-sm sm:text-base"
               onClick={handleReset}
             >
               Reset
@@ -274,19 +274,19 @@ const Calculator = () => {
 
           {error && (
             <div className="mt-4" role="alert" aria-live="assertive">
-              <div className="text-3xl text-center pb-10 text-red-500 font-medium">
+              <div className="text-xl sm:text-2xl md:text-3xl text-center pb-8 sm:pb-10 text-red-500 font-medium">
                 {error}
               </div>
             </div>
           )}
 
           {estimate && (
-            <div className="pb-20">
+            <div className="pb-12 sm:pb-16 md:pb-20">
               <div style={{ textAlign: "center" }}>
-                <div className="text-6xl font-bold" aria-live="polite">
+                <div className="text-4xl sm:text-5xl md:text-6xl font-bold" aria-live="polite">
                   {estimate.days} days
                 </div>
-                <div className="mt-2 text-lg">
+                <div className="mt-2 text-base sm:text-lg">
                   {estimate.hoursPerWeek} hrs / week
                 </div>
               </div>
