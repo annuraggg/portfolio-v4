@@ -3,10 +3,10 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="px-64 py-10">
-      <div className="flex">
+    <div className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 py-6 sm:py-8 md:py-10">
+      <div className="flex flex-col md:flex-row gap-8 md:gap-0">
         <div className="flex-1">
-          <h2 className="font-semibold text-lg">Made with ❤️ By Anurag</h2>
+          <h2 className="font-semibold text-base sm:text-lg">Made with ❤️ By Anurag</h2>
           <Link
             href={"https://buymeacoffee.com/annuraggg"}
             className="text-xs dark:text-zinc-300"
@@ -16,7 +16,7 @@ const Footer = () => {
         </div>
         <div className="flex">
           <div>
-            <h4 className="text-sm dark:text-zinc-400 mb-5">CONTACT</h4>
+            <h4 className="text-sm dark:text-zinc-400 mb-3 sm:mb-5">CONTACT</h4>
             <Link
               href={"mailto:hello@anuragsawant.in"}
               className="text-sm dark:text-zinc-300 font-semibold mt-1 hover:text-accent transition-colors block"
@@ -58,7 +58,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <p className="text-center text-xs dark:text-zinc-400 mt-7">Last Updated on {process.env.NEXT_PUBLIC_UPDATED_AT}</p>
+      <p className="text-center text-xs dark:text-zinc-400 mt-5 sm:mt-7">Last Updated on {process.env.NEXT_PUBLIC_UPDATED_AT}</p>
     </div>
   );
 };

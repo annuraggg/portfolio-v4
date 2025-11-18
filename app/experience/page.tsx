@@ -65,11 +65,11 @@ const ExperiencePage = () => {
 
   if (!isFeatureEnabled) {
     return (
-      <div className="pt-40 px-64 text-center">
-        <h1 className="font-poly text-3xl md:text-7xl font-medium bg-gradient-to-b from-[#6b7280] to-[#e5e7eb] via-[#9ca3af] dark:from-[#ffffff6e] dark:via-[#686868] dark:to-[#101010] text-transparent bg-clip-text">
+      <div className="pt-28 sm:pt-32 md:pt-40 px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 text-center">
+        <h1 className="font-poly text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-medium bg-gradient-to-b from-[#6b7280] to-[#e5e7eb] via-[#9ca3af] dark:from-[#ffffff6e] dark:via-[#686868] dark:to-[#101010] text-transparent bg-clip-text">
           EXPERIENCE
         </h1>
-        <p className="mt-4 text-gray-500">
+        <p className="mt-4 text-gray-500 text-sm sm:text-base">
           Experience section is currently unavailable
         </p>
       </div>
@@ -77,8 +77,8 @@ const ExperiencePage = () => {
   }
 
   return (
-    <div className="pt-40 px-64">
-      <h1 className="font-poly text-3xl md:text-7xl font-medium text-center bg-gradient-to-b from-[#6b7280] to-[#e5e7eb] via-[#9ca3af] dark:from-[#ffffff6e] dark:via-[#686868] dark:to-[#101010] text-transparent bg-clip-text">
+    <div className="pt-28 sm:pt-32 md:pt-40 px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64">
+      <h1 className="font-poly text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-medium text-center bg-gradient-to-b from-[#6b7280] to-[#e5e7eb] via-[#9ca3af] dark:from-[#ffffff6e] dark:via-[#686868] dark:to-[#101010] text-transparent bg-clip-text">
         EXPERIENCE
       </h1>
 
@@ -86,8 +86,8 @@ const ExperiencePage = () => {
         <Experience experience={experience} />
       </div>
 
-      <div className="my-20">
-        <h1 className="font-poly mb-20 text-3xl md:text-7xl font-medium text-center bg-gradient-to-b from-[#6b7280] to-[#e5e7eb] via-[#9ca3af] dark:from-[#ffffff6e] dark:via-[#686868] dark:to-[#101010] text-transparent bg-clip-text">
+      <div className="my-12 sm:my-16 md:my-20">
+        <h1 className="font-poly mb-12 sm:mb-16 md:mb-20 text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-medium text-center bg-gradient-to-b from-[#6b7280] to-[#e5e7eb] via-[#9ca3af] dark:from-[#ffffff6e] dark:via-[#686868] dark:to-[#101010] text-transparent bg-clip-text">
           CREDENTIALS
         </h1>
         {credentials.map((c) => (

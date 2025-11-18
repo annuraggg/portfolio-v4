@@ -25,21 +25,21 @@ const Skills = async () => {
   const images = await getValidImages(skillsData.map((skill) => skill.title));
 
   return (
-    <div className="px-64 py-20">
-      <h2 className="text-7xl text-accent font-medium text-center">
+    <div className="px-4 sm:px-6 md:px-12 lg:px-24 xl:px-32 2xl:px-64 py-12 sm:py-16 md:py-20">
+      <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-accent font-medium text-center">
         Skills
       </h2>
-      <p className="dark:text-zinc-400 text-sm text-center mt-2 mb-10">
+      <p className="dark:text-zinc-400 text-sm text-center mt-2 mb-6 sm:mb-8 md:mb-10">
         Green items include proficiency. Click to see
       </p>
-      <div className="flex justify-start">
-        <div className="-mt-14">
+      <div className="flex flex-col lg:flex-row justify-start items-center lg:items-start gap-8">
+        <div className="w-full lg:w-auto flex justify-center -mt-0 lg:-mt-14">
           <IconCloud images={images} />
         </div>
 
-        <div className="flex flex-wrap">
+        <div className="flex flex-wrap justify-center lg:justify-start w-full lg:flex-1">
           {skillsData.map((skill, index) => (
-            <div key={index} className="p-2">
+            <div key={index} className="p-1 sm:p-2">
               <SkillItem
                 title={skill.title}
                 progress={skill.progress}

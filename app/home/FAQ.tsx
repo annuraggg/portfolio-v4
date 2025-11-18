@@ -71,9 +71,9 @@ const FAQ = () => {
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <div className="container mx-auto px-36 py-20">
-        <div className="flex flex-col lg:flex-row gap-32">
-          <div>
+      <div className="container mx-auto px-4 sm:px-6 md:px-12 lg:px-24 xl:px-36 py-12 sm:py-16 md:py-20">
+        <div className="flex flex-col lg:flex-row gap-12 sm:gap-16 md:gap-20 lg:gap-32">
+          <div className="lg:w-1/3">
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -85,7 +85,7 @@ const FAQ = () => {
                   animate={{ scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.2 }}
                 />
-                <h2 className="lg:text-5xl font-bold flex flex-col">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold flex flex-col">
                   <span className="mr-3">Frequently</span>
                   <span className="text-primary mr-3">Asked</span>
                   <span>Questions</span>
@@ -107,13 +107,13 @@ const FAQ = () => {
                 >
                   <div className="bg-card  rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-200 hover:border-accent/50">
                     <motion.button
-                      className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-foreground/10 transition-colors duration-200"
+                      className="w-full px-4 sm:px-6 py-4 sm:py-5 text-left flex items-center justify-between hover:bg-foreground/10 transition-colors duration-200"
                       onClick={() => toggleItem(index)}
                       whileHover={{ scale: 1.002 }}
                       whileTap={{ scale: 0.998 }}
                     >
-                      <div className="flex items-center gap-4">
-                        <h3 className="text-2xl font-semibold text-foreground pr-4 group-hover:text-primary transition-colors duration-200">
+                      <div className="flex items-center gap-2 sm:gap-4">
+                        <h3 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-foreground pr-2 sm:pr-4 group-hover:text-primary transition-colors duration-200">
                           {item.question}
                         </h3>
                       </div>
@@ -122,7 +122,7 @@ const FAQ = () => {
                         transition={{ duration: 0.3, ease: "easeInOut" }}
                         className="flex-shrink-0 text-muted-foreground group-hover:text-accent transition-colors duration-200"
                       >
-                        <ChevronDown className="w-5 h-5" />
+                        <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5" />
                       </motion.div>
                     </motion.button>
 
@@ -140,10 +140,10 @@ const FAQ = () => {
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: -20, opacity: 0 }}
                             transition={{ duration: 0.3 }}
-                            className="px-2 pb-6 pt-4 pl-6"
+                            className="px-2 sm:px-4 pb-4 sm:pb-6 pt-2 sm:pt-4 pl-4 sm:pl-6"
                           >
                             <div></div>
-                            <p className="text-muted-foreground leading-relaxed">
+                            <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
                               {item.answer}
                             </p>
                           </motion.div>

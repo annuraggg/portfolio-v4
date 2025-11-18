@@ -49,9 +49,9 @@ const ProjectsPage = () => {
 
   if (!isFeatureEnabled) {
     return (
-      <div className="pt-48 px-36 text-center">
-        <h1 className="text-5xl font-bold">Projects</h1>
-        <p className="mt-4 text-gray-500">
+      <div className="pt-32 sm:pt-40 md:pt-48 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-36 text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">Projects</h1>
+        <p className="mt-4 text-gray-500 text-sm sm:text-base">
           Projects section is currently unavailable
         </p>
       </div>
@@ -60,16 +60,16 @@ const ProjectsPage = () => {
 
   if (error) {
     return (
-      <div className="pt-48 px-36 text-center">
-        <h1 className="text-5xl font-bold">Projects</h1>
-        <p className="mt-4 text-red-500">{error}</p>
+      <div className="pt-32 sm:pt-40 md:pt-48 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-36 text-center">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">Projects</h1>
+        <p className="mt-4 text-red-500 text-sm sm:text-base">{error}</p>
       </div>
     );
   }
 
   return (
-    <div className="pt-48 px-36">
-      <h1 className="text-5xl font-bold text-center">Projects</h1>
+    <div className="pt-32 sm:pt-40 md:pt-48 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-36">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">Projects</h1>
       <div>
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
