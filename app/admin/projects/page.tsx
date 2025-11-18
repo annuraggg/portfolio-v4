@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Pencil, Trash2, Plus, X } from "lucide-react";
+import FileUpload from "@/components/admin/FileUpload";
 
 interface Project {
   id?: string;
@@ -234,12 +235,21 @@ export default function ProjectsManagementPage() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Cover Image URL</label>
+                <FileUpload
+                  label="Cover Image"
+                  type="cover"
+                  currentUrl={formData.cover}
+                  onUpload={(url) => setFormData({ ...formData, cover: url })}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Or enter URL manually:
+                </p>
                 <input
                   type="text"
                   value={formData.cover || ""}
                   onChange={(e) => setFormData({ ...formData, cover: e.target.value })}
-                  className="w-full px-3 py-2 border rounded-md bg-background"
+                  className="w-full px-3 py-2 border rounded-md bg-background mt-1"
+                  placeholder="https://..."
                 />
               </div>
 
