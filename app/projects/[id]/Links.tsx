@@ -15,7 +15,7 @@ const Links = ({ project }: { project: Project }) => {
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
-      <div className="flex mt-12 font-semibold gap-5">
+      <div className="flex flex-wrap mt-8 sm:mt-10 md:mt-12 font-semibold gap-3 sm:gap-4 md:gap-5 text-sm sm:text-base">
         {project?.links?.demo && (
           <Link
             href={project.links.demo}

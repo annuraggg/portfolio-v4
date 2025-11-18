@@ -70,7 +70,7 @@ export default async function DiscordProfile() {
 
   if (!discordData || !discordData.success) {
     return (
-      <div className="text-white bg-black/40 rounded-lg p-4 w-[400px] text-center">
+      <div className="text-white bg-black/40 rounded-lg p-4 w-full max-w-[400px] text-center">
         Loading Discord…
       </div>
     );
@@ -87,7 +87,7 @@ export default async function DiscordProfile() {
       href={`https://discordapp.com/users/${user.id}`}
       target="_blank"
       rel="noopener noreferrer"
-      className="flex border-1 dark:border-4 items-center space-x-4 p-4 rounded-lg w-[400px] hover:opacity-80"
+      className="flex border-1 dark:border-4 items-center space-x-3 sm:space-x-4 p-3 sm:p-4 rounded-lg w-full max-w-[400px] hover:opacity-80"
     >
       <div className="relative">
         <Image
@@ -95,17 +95,17 @@ export default async function DiscordProfile() {
           alt={user.username}
           width={48}
           height={48}
-          className="w-12 h-12 rounded-full"
+          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full"
         />
-        <span className="absolute bottom-0 right-0 w-4 h-4 flex items-center justify-center border-2 border-black rounded-full">
+        <span className="absolute bottom-0 right-0 w-3 h-3 sm:w-4 sm:h-4 flex items-center justify-center border-2 border-black rounded-full">
           {statusIcon(status)}
         </span>
       </div>
       <div>
-        <div className="font-semibold text-lg">
+        <div className="font-semibold text-base sm:text-lg">
           {user.display_name || user.username}
         </div>
-        <div className="text-sm text-gray-400">{customStatus || status}</div>
+        <div className="text-xs sm:text-sm text-gray-400">{customStatus || status}</div>
       </div>
     </a>
   );

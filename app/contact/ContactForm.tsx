@@ -79,22 +79,22 @@ const ContactForm = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className={`mt-5 md:w-auto w-[85vw] animate__animated ${
+      className={`mt-5 w-full max-w-2xl px-4 sm:px-0 animate__animated ${
         isAngry ? "animate__wobble" : ""
       }`}
     >
-      <div className="flex">
+      <div className="flex flex-col sm:flex-row gap-0 sm:gap-0">
         <input
           name="name"
           type="text"
           placeholder="Name"
-          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-[50%]"
+          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-full sm:w-[50%]"
         />
         <input
           name="email"
           type="email"
           placeholder="Email"
-          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-[50%]"
+          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-full sm:w-[50%]"
         />
       </div>
 
