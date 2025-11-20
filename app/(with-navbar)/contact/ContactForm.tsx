@@ -79,22 +79,22 @@ const ContactForm = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className={`mt-5 w-full max-w-2xl px-4 sm:px-0 animate__animated ${
+      className={`mt-5 w-full md:max-w-[30vw] px-4 sm:px-0 animate__animated ${
         isAngry ? "animate__wobble" : ""
       }`}
     >
-      <div className="flex flex-col sm:flex-row gap-0 sm:gap-0">
+      <div className="flex flex-col">
         <input
           name="name"
           type="text"
           placeholder="Name"
-          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-full sm:w-[50%]"
+          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-full "
         />
         <input
           name="email"
           type="email"
           placeholder="Email"
-          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-full sm:w-[50%]"
+          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-full "
         />
       </div>
 
@@ -103,20 +103,20 @@ const ContactForm = () => {
           name="subject"
           type="text"
           placeholder="Subject"
-          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent"
+          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-full "
         />
         <textarea
           name="message"
           cols={30}
           rows={5}
           placeholder="Message"
-          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent"
+          className="border-b-4 rounded-lg border border-gray-500 p-2 m-2 bg-transparent w-full "
         />
 
         <button
           type="submit"
           disabled={loading}
-          className="bg-transparent flex items-center justify-center border-b-4 border border-gray-700 hover:border-gray-500 transition-all duration-300 text-white p-2 rounded-lg m-2 disabled:opacity-70"
+          className="bg-transparent flex items-center justify-center border-b-4 border w-full  border-gray-700 hover:border-gray-500 transition-all duration-300 text-white p-2 rounded-lg m-2 disabled:opacity-70"
         >
           {loading ? <span className="animate-pulse">Sending…</span> : "Submit"}
         </button>

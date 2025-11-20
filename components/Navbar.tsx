@@ -114,7 +114,7 @@ const Navbar = () => {
             showText ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-5"
           }`}
         >
-          <div className="text-lg sm:text-xl md:text-2xl font-bold mt-1 md:mt-2">Anurag Sawant</div>
+          <div className="text-lg sm:text-md md:text-2xl font-bold mt-1 md:mt-2 w-72 md:w-fit">Anurag Sawant</div>
         </div>
       </div>
 

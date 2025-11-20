@@ -14,7 +14,7 @@ const Idea = ({ project }: Props) => {
 
   return (
     <motion.div
-      className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 pt-48 sm:pt-56 md:pt-64 lg:pt-72 mt-20 sm:mt-24 md:mt-28 lg:mt-32 overflow-hidden"
+      className="px-4 sm:px-8 md:px-16 lg:px-32 xl:px-64 pt-48 sm:pt-56 md:pt-64 lg:pt-72 sm:mt-24 md:mt-28 mt-0 lg:mt-32 overflow-hidden"
       ref={ref}
       initial={{ opacity: 0, y: 50 }}
       animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
