@@ -1,20 +1,17 @@
 import React from "react";
 import Experience from "./Experience";
 import { CredentialItem } from "./CredentialItem";
-import type { Credential } from "@/lib/db/credentials";
-import type { Experience as ExperienceType } from "@/lib/db/experience";
+import { getAllCredentials, type Credential } from "@/lib/db/credentials";
+import {
+  getAllExperience,
+  type Experience as ExperienceType,
+} from "@/lib/db/experience";
 import { configCatClient } from "@/lib/config/configcat-server";
 
 async function fetchCredentials(): Promise<Credential[] | Error> {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/credentials`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch credentials");
-    }
-    const data = (await response.json()) as Credential[];
-    return data;
+    const credentials = await getAllCredentials();
+    return credentials;
   } catch (err) {
     console.error("Error loading credentials:", err);
     return new Error("Error fetching credentials");
@@ -23,22 +20,21 @@ async function fetchCredentials(): Promise<Credential[] | Error> {
 
 async function fetchExperience(): Promise<ExperienceType[] | Error> {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/api/experience`
-    );
-    if (!response.ok) {
-      throw new Error("Failed to fetch experience");
-    }
-    const data = (await response.json()) as ExperienceType[];
-    return data;
+    const experience = await getAllExperience();
+    return experience;
   } catch (err) {
     console.error("Error loading experience:", err);
     return new Error("Error fetching experience");
   }
 }
 
+export const dynamic = "force-dynamic";
+
 export default async function ExperiencePage() {
-  const isFeatureEnabled = await configCatClient.getValueAsync("enableexperience", true);
+  const isFeatureEnabled = await configCatClient.getValueAsync(
+    "enableexperience",
+    true
+  );
 
   if (!isFeatureEnabled) {
     return (

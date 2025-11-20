@@ -1,6 +1,9 @@
 import ProjectCard from "./ProjectCard";
 import { getFeatureFlag } from "@/lib/config/configcat-server";
-import type { Project } from "@/lib/db/projects";
+import {
+  getAllProjects,
+  type Project,
+} from "@/lib/db/projects";
 
 export default async function ProjectsPage() {
   const isFeatureEnabled = await getFeatureFlag("enableprojects", true);
@@ -16,11 +19,20 @@ export default async function ProjectsPage() {
     );
   }
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects`, {
-    cache: "no-store",
-  });
+  const getProjects = async () => {
+    try {
+      const projects = await getAllProjects();
 
-  if (!res.ok) {
+      return projects;
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      return { error: "Failed to fetch projects", status: 500 };
+    }
+  };
+
+  const res = await getProjects();
+
+  if ("error" in res) {
     return (
       <div className="pt-32 sm:pt-40 md:pt-48 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-36 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">Projects</h1>
@@ -31,7 +43,7 @@ export default async function ProjectsPage() {
     );
   }
 
-  const projects: Project[] = await res.json();
+  const projects: Project[] = res;
 
   return (
     <div className="pt-32 sm:pt-40 md:pt-48 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-36">
