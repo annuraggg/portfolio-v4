@@ -32,7 +32,7 @@ const FAQ = () => {
     {
       question: "What are your rates?",
       answer:
-        "As a fresh developer, I offer competitive rates: ₹500-800/hour for hourly work. Project-based pricing: Simple websites ₹15,000-30,000, Web applications ₹40,000-1,50,000, E-commerce sites ₹60,000-2,00,000. Contact me for a detailed quote based on your requirements.",
+        "As a fresh developer, I offer competitive rates. Contact me for a detailed quote based on your requirements.",
       icon: <Monitor className="w-5 h-5" />,
     },
     {

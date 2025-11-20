@@ -71,7 +71,7 @@ const Hero = ({ project }: Props) => {
       </div>
 
       <div className="w-full lg:absolute lg:-right-60 lg:top-8 lg:translate-x-20 lg:w-[70vw] mt-8 lg:mt-0">
-        <Safari imageSrc={process.env.NEXT_PUBLIC_R2_PUBLIC_URL! + project.cover!} url={project.links?.demo} />
+        <Safari imageSrc={process.env.NEXT_PUBLIC_R2_PUBLIC_URL! + project.cover!} url={project.links?.demo} pixelImage />
       </div>
     </div>
   );

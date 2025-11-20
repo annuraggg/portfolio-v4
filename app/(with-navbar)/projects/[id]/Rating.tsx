@@ -47,7 +47,7 @@ const StarsDisplay = ({
             <div
               key={i}
               aria-label={`${value} stars`}
-              className={`mask mask-star ${half} `}
+              className={`mask mask-star ${half} dark:bg-white bg-black`}
               defaultChecked={i + 1 === activeIndex}
               onClick={() => {
                 if (!readOnly && onSelect) onSelect(value);
@@ -63,7 +63,7 @@ const StarsDisplay = ({
             type="radio"
             name={name}
             aria-label={`${value} stars`}
-            className={`mask mask-star-2 ${half} `}
+            className={`mask mask-star-2 ${half} dark:bg-white bg-black`}
             defaultChecked={i + 1 === activeIndex}
             readOnly={readOnly}
             onClick={() => {
@@ -169,7 +169,7 @@ const Rating = ({
       {/* MODAL */}
       {modalOpen && (
         <div className="modal modal-open">
-          <div className="modal-box" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-box bg-background text-foreground" onClick={(e) => e.stopPropagation()}>
             <h3 className="font-bold text-lg">Rate this project</h3>
 
             <div className="py-4 flex justify-center">

@@ -1,26 +1,28 @@
-import Image from "next/image"
-import type { HTMLAttributes } from "react"
+import Image from "next/image";
+import type { HTMLAttributes } from "react";
+import { PixelImage } from "@/components/ui/pixel-image";
 
-const SAFARI_WIDTH = 1203
-const SAFARI_HEIGHT = 600
-const SCREEN_X = 1
-const SCREEN_Y = 52
-const SCREEN_WIDTH = 1200
-const SCREEN_HEIGHT = 800
+const SAFARI_WIDTH = 1203;
+const SAFARI_HEIGHT = 600;
+const SCREEN_X = 1;
+const SCREEN_Y = 52;
+const SCREEN_WIDTH = 1200;
+const SCREEN_HEIGHT = 800;
 
 // Calculated percentages
-const LEFT_PCT = (SCREEN_X / SAFARI_WIDTH) * 100
-const TOP_PCT = (SCREEN_Y / SAFARI_HEIGHT) * 100
-const WIDTH_PCT = (SCREEN_WIDTH / SAFARI_WIDTH) * 100
-const HEIGHT_PCT = (SCREEN_HEIGHT / SAFARI_HEIGHT) * 100
+const LEFT_PCT = (SCREEN_X / SAFARI_WIDTH) * 100;
+const TOP_PCT = (SCREEN_Y / SAFARI_HEIGHT) * 100;
+const WIDTH_PCT = (SCREEN_WIDTH / SAFARI_WIDTH) * 100;
+const HEIGHT_PCT = (SCREEN_HEIGHT / SAFARI_HEIGHT) * 100;
 
-type SafariMode = "default" | "simple"
+type SafariMode = "default" | "simple";
 
 export interface SafariProps extends HTMLAttributes<HTMLDivElement> {
-  url?: string
-  imageSrc?: string
-  videoSrc?: string
-  mode?: SafariMode
+  url?: string;
+  imageSrc?: string;
+  videoSrc?: string;
+  mode?: SafariMode;
+  pixelImage?: boolean;
 }
 
 export function Safari({
@@ -30,14 +32,17 @@ export function Safari({
   mode = "default",
   className,
   style,
+  pixelImage = false,
   ...props
 }: SafariProps) {
-  const hasVideo = !!videoSrc
-  const hasMedia = hasVideo || !!imageSrc
+  const hasVideo = !!videoSrc;
+  const hasMedia = hasVideo || !!imageSrc;
 
   return (
     <div
-      className={`relative inline-block w-full align-middle leading-none ${className ?? ""}`}
+      className={`relative inline-block w-full align-middle leading-none ${
+        className ?? ""
+      }`}
       style={{
         aspectRatio: `${SAFARI_WIDTH}/${SAFARI_HEIGHT}`,
         ...style,
@@ -77,12 +82,20 @@ export function Safari({
             borderRadius: "0 0 11px 11px",
           }}
         >
-          <Image
-            src={imageSrc}
-            alt=""
-            width={SCREEN_WIDTH}
-            height={SCREEN_HEIGHT}
-          />
+          {pixelImage ? (
+            <PixelImage
+              src={imageSrc}
+              width={SCREEN_WIDTH}
+              height={SCREEN_HEIGHT}
+            />
+          ) : (
+            <Image
+              src={imageSrc}
+              alt=""
+              width={SCREEN_WIDTH}
+              height={SCREEN_HEIGHT}
+            />
+          )}
         </div>
       )}
 
@@ -236,5 +249,5 @@ export function Safari({
         </g>
       </svg>
     </div>
-  )
+  );
 }

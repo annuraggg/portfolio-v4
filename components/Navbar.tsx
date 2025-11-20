@@ -6,6 +6,7 @@ import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 import { ExternalLink, Menu, X } from "lucide-react";
 import { useFeatureFlag } from "configcat-react";
 import { getAssetUrl } from "@/lib/utils/assets";
+import confetti from "canvas-confetti";
 
 const Navbar = () => {
   const SCROLL_THRESHOLD = 100;
@@ -15,6 +16,32 @@ const Navbar = () => {
 
   const borderTimer = useRef<NodeJS.Timeout | null>(null);
   const textTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const handleClick = () => {
+    const end = Date.now() + 3 * 1000; // 3 seconds
+    const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+    const frame = () => {
+      if (Date.now() > end) return;
+      confetti({
+        particleCount: 2,
+        angle: 60,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 0, y: 0.5 },
+        colors: colors,
+      });
+      confetti({
+        particleCount: 2,
+        angle: 120,
+        spread: 55,
+        startVelocity: 60,
+        origin: { x: 1, y: 0.5 },
+        colors: colors,
+      });
+      requestAnimationFrame(frame);
+    };
+    frame();
+  };
 
   const { value: isExperienceEnabled, loading: isExperienceLoading } =
     useFeatureFlag("enableexperience", true);
@@ -104,7 +131,8 @@ const Navbar = () => {
             width={100}
             height={100}
             alt="Logo"
-            className="ml-0 sm:ml-5 w-16 sm:w-20 md:w-24 h-auto dark:invert-0 invert"
+            className="ml-0 sm:ml-5 w-16 sm:w-20 md:w-24 h-auto dark:invert-0 invert cursor-pointer"
+            onClick={handleClick}
           />
         </div>
 
@@ -114,7 +142,9 @@ const Navbar = () => {
             showText ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-5"
           }`}
         >
-          <div className="text-lg sm:text-md md:text-2xl font-bold mt-1 md:mt-2 w-72 md:w-fit">Anurag Sawant</div>
+          <div className="text-lg sm:text-md md:text-2xl font-bold mt-1 md:mt-2 w-72 md:w-fit">
+            Anurag Sawant
+          </div>
         </div>
       </div>
 
@@ -166,7 +196,10 @@ const Navbar = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.external && (
-                    <ExternalLink className="inline-block mb-1 mr-2" size={14} />
+                    <ExternalLink
+                      className="inline-block mb-1 mr-2"
+                      size={14}
+                    />
                   )}
                   {item.name}
                 </Link>

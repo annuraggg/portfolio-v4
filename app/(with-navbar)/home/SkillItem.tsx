@@ -19,10 +19,10 @@ export const SkillItem: React.FC<SkillItemProps> = ({
 
   return (
     <motion.button
-      className={`text-xs md:text-base borderBlack rounded-xl px-5 py-3 cursor-pointer bg-white/10 ${
-        progress ? "hover:bg-green-600" : "hover:bg-red-500"
+      className={`text-xs md:text-base borderBlack rounded-xl px-5 py-3 hover:text-white cursor-pointer dark:bg-white/10 bg-black/20 ${
+        progress ? "hover:bg-green-600 dark:hover:bg-green-600" : "hover:bg-red-500 dark:hover:bg-red-500"
       } hover:text-${
-        progress ? "hover:bg-green-600" : "hover:bg-red-500"
+        progress ? "hover:bg-green-600 dark:hover:bg-green-600" : "hover:bg-red-500 dark:hover:bg-red-500"
       } transition-all duration-300`}
       variants={fadeInAnimationVariants}
       initial="initial"

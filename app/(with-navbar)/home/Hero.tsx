@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { motion } from "motion/react";
 import { Highlighter } from "@/components/ui/highlighter";
 import DockComponent from "./Socials";
+import { Spotlight } from "@/components/ui/spotlight";
 
 const Hero = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -11,6 +12,10 @@ const Hero = () => {
 
   return (
     <div className="min-h-screen flex flex-col justify-between pb-10 px-4 sm:px-6 md:px-8">
+      <Spotlight
+        className="-top-40 left-0 md:-top-20 md:left-60"
+        fill="white"
+      />
       <motion.div
         initial={{
           opacity: 0,
@@ -43,7 +48,7 @@ const Hero = () => {
                 action="highlight"
                 color="var(--color-accent)"
               >
-                Full Stack Developer.
+                <span className="dark:text-black text-white">Full Stack Developer.</span>
               </Highlighter>
             </div>
             <span
@@ -52,7 +57,7 @@ const Hero = () => {
               }`}
               style={{
                 backgroundImage: `url('${waveUrl}')`,
-                backgroundSize: '28px 12px'
+                backgroundSize: "28px 12px",
               }}
             />
           </h2>

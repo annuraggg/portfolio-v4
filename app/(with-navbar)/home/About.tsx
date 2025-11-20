@@ -8,7 +8,7 @@ const About = () => {
   const inView = useInView(ref, { amount: 0.2 });
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-32 py-12 md:py-0">
+    <div className=" flex flex-col items-center justify-center px-4 sm:px-6 md:px-8 lg:px-16 xl:px-32 py-12 md:py-0">
       <motion.h2
         className="w-full max-w-7xl"
         ref={ref}

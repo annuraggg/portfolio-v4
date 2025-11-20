@@ -25,7 +25,7 @@ const Skills = async () => {
   const images = await getValidImages(skillsData.map((skill) => skill.title));
 
   return (
-    <div className="px-4 sm:px-6 md:px-12 lg:px-24 xl:px-32 2xl:px-64 py-12 sm:py-16 md:py-20">
+    <div className="px-4 sm:px-6 md:px-12 lg:px-24 lg:py-32 xl:px-32 2xl:px-64 py-12 sm:py-16 md:py-20">
       <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-accent font-medium text-center">
         Skills
       </h2>
