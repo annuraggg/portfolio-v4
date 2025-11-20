@@ -4,9 +4,9 @@ import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 import { ExternalLink, Menu, X } from "lucide-react";
-import { useFeatureFlag } from "configcat-react";
 import { getAssetUrl } from "@/lib/utils/assets";
 import confetti from "canvas-confetti";
+import { getFeatureFlag } from "@/lib/config/configcat-server";
 
 const Navbar = () => {
   const SCROLL_THRESHOLD = 100;
@@ -43,23 +43,20 @@ const Navbar = () => {
     frame();
   };
 
-  const { value: isExperienceEnabled, loading: isExperienceLoading } =
-    useFeatureFlag("enableexperience", true);
-
-  const { value: isProjectsEnabled, loading: isProjectsLoading } =
-    useFeatureFlag("enableprojects", true);
+  const isExperienceEnabled = getFeatureFlag("enableexperience", true);
+  const isProjectsEnabled = getFeatureFlag("enableprojects", true);
 
   const navItems = [
     { name: "Home", path: "/", enabled: true },
     {
       name: "Projects",
       path: "/projects",
-      enabled: isProjectsEnabled && !isProjectsLoading,
+      enabled: isProjectsEnabled,
     },
     {
       name: "Experience",
       path: "/experience",
-      enabled: isExperienceEnabled && !isExperienceLoading,
+      enabled: isExperienceEnabled,
     },
     { name: "Contact", path: "/contact", enabled: true },
     {
@@ -114,8 +111,10 @@ const Navbar = () => {
 
   return (
     <div
-      className={`flex p-5 px-4 sm:px-6 md:px-10 justify-between items-center h-20 md:h-28 fixed w-full bg-background/50 backdrop-blur transition-normal z-[100] ${
-        showBorder ? "border-b border-white/20" : ""
+      className={`flex p-5 px-4 sm:px-6 md:px-10 justify-between items-center h-20 md:h-28 fixed w-full backdrop-blur transition-normal z-[100] ${
+        showBorder
+          ? "border-b dark:border-white/20 border-black/20 bg-background/50"
+          : ""
       }`}
     >
       {/* Logo / Text */}

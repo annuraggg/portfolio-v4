@@ -1,16 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { useFeatureFlag } from "configcat-react";
+import { getFeatureFlag } from "@/lib/config/configcat-server";
 
 export default function MouseFollower() {
   const dotRef = useRef<HTMLDivElement>(null);
   const pos = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
   const [hidden, setHidden] = useState(false);
-
-  const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
-    "enablemousefollower",
-    true
-  );
+  const isFeatureEnabled = getFeatureFlag("enablemousefollower", true);
 
   useEffect(() => {
     if (!isFeatureEnabled) return;
@@ -59,7 +55,7 @@ export default function MouseFollower() {
     };
   }, [isFeatureEnabled]);
 
-  if (isLoadingFlag || !isFeatureEnabled) {
+  if (!isFeatureEnabled) {
     return null;
   }
 

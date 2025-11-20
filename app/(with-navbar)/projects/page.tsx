@@ -1,51 +1,9 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
 import ProjectCard from "./ProjectCard";
-import { useFeatureFlag } from "configcat-react";
+import { getFeatureFlag } from "@/lib/config/configcat-server";
 import type { Project } from "@/lib/db/projects";
-import Loader from "@/components/Loader";
 
-const ProjectsPage = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
-    "enableprojects",
-    true
-  );
-
-  useEffect(() => {
-    async function fetchProjects() {
-      try {
-        const response = await fetch("/api/projects");
-        if (!response.ok) {
-          throw new Error("Failed to fetch projects");
-        }
-        const data = await response.json();
-        setProjects(data);
-      } catch (err) {
-        setError(
-          err instanceof Error ? err.message : "Failed to load projects"
-        );
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    if (isFeatureEnabled && !isLoadingFlag) {
-      fetchProjects();
-    }
-  }, [isFeatureEnabled, isLoadingFlag]);
-
-  if (isLoadingFlag || loading) {
-    return (
-      <div className="flex flex-col items-center justify-center w-full h-screen">
-        <Loader />
-      </div>
-    );
-  }
+export default async function ProjectsPage() {
+  const isFeatureEnabled = await getFeatureFlag("enableprojects", true);
 
   if (!isFeatureEnabled) {
     return (
@@ -58,18 +16,28 @@ const ProjectsPage = () => {
     );
   }
 
-  if (error) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects`, {
+    cache: "no-store",
+  });
+
+  if (!res.ok) {
     return (
       <div className="pt-32 sm:pt-40 md:pt-48 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-36 text-center">
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold">Projects</h1>
-        <p className="mt-4 text-red-500 text-sm sm:text-base">{error}</p>
+        <p className="mt-4 text-red-500 text-sm sm:text-base">
+          Failed to load projects
+        </p>
       </div>
     );
   }
 
+  const projects: Project[] = await res.json();
+
   return (
     <div className="pt-32 sm:pt-40 md:pt-48 px-4 sm:px-8 md:px-16 lg:px-24 xl:px-36">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">Projects</h1>
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center">
+        Projects
+      </h1>
       <div>
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />
@@ -77,6 +45,4 @@ const ProjectsPage = () => {
       </div>
     </div>
   );
-};
-
-export default ProjectsPage;
+}

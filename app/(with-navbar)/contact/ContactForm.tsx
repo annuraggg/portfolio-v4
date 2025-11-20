@@ -1,21 +1,35 @@
 "use client";
 
 import { toast } from "sonner";
-import { FormEvent, useState } from "react";
-import { useFeatureFlag } from "configcat-react";
+import { FormEvent, useEffect, useState } from "react";
 import "animate.css";
+import { getFeatureFlag } from "@/lib/config/configcat-server";
 
 const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [isAngry, setIsAngry] = useState(false);
-
-  const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
-    "enablecontactform",
-    true
+  const [isFeatureEnabled, setIsFeatureEnabled] = useState<boolean | null>(
+    null
   );
+
+  useEffect(() => {
+    getFeatureFlag("enablecontactform", false).then((value) => {
+      setIsFeatureEnabled(value as boolean);
+    });
+  }, []);
+
+  if (isFeatureEnabled === null) {
+    return null; // or skeleton if you ever want
+  }
+
+  if (!isFeatureEnabled) {
+    return null;
+  }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setIsAngry(true);
+    return;
 
     const fd = new FormData(e.currentTarget);
     const name = String(fd.get("name") || "");
@@ -43,13 +57,6 @@ const ContactForm = () => {
 
     setLoading(true);
     try {
-      // await emailjs.send(
-      //   process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-      //   process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-      //   { name, email, subject, message },
-      //   { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY! }
-      // );
-
       await fetch("/api/contact", {
         method: "POST",
         headers: {
@@ -59,21 +66,12 @@ const ContactForm = () => {
       });
 
       toast.success("Message sent successfully");
-      // (e.currentTarget as HTMLFormElement).reset();
     } catch (err) {
       console.error(err);
       toast.error("An error occurred. Please try again later");
     } finally {
       setLoading(false);
     }
-  }
-
-  if (isLoadingFlag) {
-    return null;
-  }
-
-  if (!isFeatureEnabled) {
-    return null;
   }
 
   return (

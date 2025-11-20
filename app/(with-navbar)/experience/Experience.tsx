@@ -1,4 +1,3 @@
-"use client";
 import type { Experience as ExperienceType } from "@/lib/db/experience";
 
 const Experience = ({ experience }: { experience: ExperienceType[] }) => {
@@ -14,7 +13,9 @@ const Experience = ({ experience }: { experience: ExperienceType[] }) => {
           </h2>
 
           <div className="w-full md:w-[400px] text-center md:text-left">
-            <p className="text-base sm:text-lg md:text-xl font-medium">{exp.role}</p>
+            <p className="text-base sm:text-lg md:text-xl font-medium">
+              {exp.role}
+            </p>
             <p className="text-gray-500 text-xs md:text-sm">{exp.date}</p>
             <p className="text-gray-500 text-sm md:text-base mt-2">
               {exp.description}

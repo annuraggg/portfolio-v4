@@ -3,9 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { flushSync } from "react-dom";
-import { useFeatureFlag } from "configcat-react";
-
 import { cn } from "@/lib/utils";
+import { getFeatureFlag } from "@/lib/config/configcat-server";
 
 type Props = {
   className?: string;
@@ -15,10 +14,7 @@ export const AnimatedThemeToggler = ({ className }: Props) => {
   const [isDark, setIsDark] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const { value: isFeatureEnabled, loading: isLoadingFlag } = useFeatureFlag(
-    "enablethemeswitcher",
-    true
-  );
+  const isFeatureEnabled = getFeatureFlag("enablethemeswitcher", true);
 
   useEffect(() => {
     const updateTheme = () => {
@@ -72,7 +68,7 @@ export const AnimatedThemeToggler = ({ className }: Props) => {
     );
   }, [isDark]);
 
-  if (isLoadingFlag || !isFeatureEnabled) {
+  if (!isFeatureEnabled) {
     return null;
   }
 

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ConfigCatProvider } from "configcat-react";
 import { Toaster } from "sonner";
 
 // Fallback to system fonts
@@ -76,14 +75,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const CONFIGCAT_SDK_KEY = process.env.NEXT_PUBLIC_CONFIGCAT_SDK_KEY;
-
-  if (!CONFIGCAT_SDK_KEY) {
-    throw new Error(
-      "ConfigCat SDK key is not defined in environment variables."
-    );
-  }
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -95,10 +86,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ConfigCatProvider sdkKey={CONFIGCAT_SDK_KEY}>
-            {children}
-            <Toaster position="bottom-right" />
-          </ConfigCatProvider>
+          {children}
+          <Toaster position="bottom-right" />
         </ThemeProvider>
       </body>
     </html>
