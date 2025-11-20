@@ -39,7 +39,7 @@ const links = [
     href: "https://www.instagram.com/annuraggg",
   },
   {
-    name: "Buy Me a Coffee",
+    name: "Buy Me a Coffee?",
     icon: SiBuymeacoffee,
     href: "https://www.buymeacoffee.com/annuraggg",
   },

@@ -73,7 +73,7 @@ export const AnimatedThemeToggler = ({ className }: Props) => {
   }
 
   return (
-    <button ref={buttonRef} onClick={toggleTheme} className={cn(className)}>
+    <button ref={buttonRef} onClick={toggleTheme} className={cn(className)} name="Toggle Theme" aria-label="Toggle Theme">
       {isDark ? <Sun /> : <Moon />}
     </button>
   );

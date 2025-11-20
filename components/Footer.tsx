@@ -16,7 +16,7 @@ const Footer = () => {
         </div>
         <div className="flex">
           <div>
-            <h4 className="text-sm dark:text-zinc-400 mb-3 sm:mb-5">CONTACT</h4>
+            <h2 className="text-sm dark:text-zinc-400 mb-3 sm:mb-5">CONTACT</h2>
             <Link
               href={"mailto:hello@anuragsawant.in"}
               className="text-sm dark:text-zinc-300 font-semibold mt-1 hover:text-accent transition-colors block"
