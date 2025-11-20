@@ -2,7 +2,6 @@
 
 import { toast } from "sonner";
 import { FormEvent, useEffect, useState } from "react";
-import "animate.css";
 import { getFeatureFlag } from "@/lib/config/configcat-server";
 
 const ContactForm = () => {
@@ -28,8 +27,6 @@ const ContactForm = () => {
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setIsAngry(true);
-    return;
 
     const fd = new FormData(e.currentTarget);
     const name = String(fd.get("name") || "");
@@ -50,7 +47,11 @@ const ContactForm = () => {
       email === "contact@anuragsawant.in"
     ) {
       toast.warning("You ain't Anurag :D");
-      setIsAngry(true);
+      setIsAngry(false);
+      requestAnimationFrame(() => {
+        setIsAngry(true);
+      });
+
       setTimeout(() => setIsAngry(false), 1000);
       return;
     }
@@ -77,8 +78,8 @@ const ContactForm = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className={`mt-5 w-full md:max-w-[30vw] px-4 sm:px-0 animate__animated ${
-        isAngry ? "animate__wobble" : ""
+      className={`mt-5 w-full md:max-w-[30vw] px-4 sm:px-0 ${
+        isAngry ? "wobble" : ""
       }`}
     >
       <div className="flex flex-col">

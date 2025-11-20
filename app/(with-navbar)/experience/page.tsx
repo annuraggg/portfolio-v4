@@ -3,7 +3,7 @@ import Experience from "./Experience";
 import { CredentialItem } from "./CredentialItem";
 import type { Credential } from "@/lib/db/credentials";
 import type { Experience as ExperienceType } from "@/lib/db/experience";
-import { configCatClient, getFeatureFlag } from "@/lib/config/configcat-server";
+import { configCatClient } from "@/lib/config/configcat-server";
 
 async function fetchCredentials(): Promise<Credential[] | Error> {
   try {
