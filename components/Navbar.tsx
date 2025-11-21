@@ -5,6 +5,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 import { ExternalLink, Menu, X } from "lucide-react";
 import { getAssetUrl } from "@/lib/utils/assets";
+import { RouteProgress } from "./ui/route-progress";
 
 const Navbar = () => {
   const SCROLL_THRESHOLD = 100;
@@ -113,6 +114,8 @@ const Navbar = () => {
           : ""
       }`}
     >
+      <RouteProgress />
+
       {/* Logo / Text */}
       <div className="relative w-32 sm:w-40 md:w-48 h-8 md:h-10">
         {/* Logo (show when !showText) */}

@@ -1,5 +1,5 @@
 import { Option } from "@/components/DirectionAwareSelect";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Select from "@/components/DirectionAwareSelect";
 import DirectionHoverButton from "@/components/DirectionAwareButton";
 
@@ -124,7 +124,13 @@ function estimateProject(
   return { hours: finalHours, days, hoursPerWeek };
 }
 
-const Calculator = () => {
+const Calculator = ({
+  show,
+  setShow,
+}: {
+  show: boolean;
+  setShow: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
   const [industry, setIndustry] = useState<string | null>("ecommerce");
   const [platform, setPlatform] = useState<string[] | null>(null);
   const [featureSet, setFeatureSet] = useState<string[] | null>(null);
@@ -132,6 +138,28 @@ const Calculator = () => {
   const [error, setError] = useState<string | null>(null);
 
   const resultRef = useRef<HTMLDivElement | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const handleClose = () => {
+      setShow(false);
+    };
+
+    dialog.addEventListener("close", handleClose);
+
+    if (show) {
+      dialog.showModal();
+    } else {
+      dialog.close();
+    }
+
+    return () => {
+      dialog.removeEventListener("close", handleClose);
+    };
+  }, [show, setShow]);
 
   const handleCalculate = () => {
     if (!industry) {
@@ -169,11 +197,11 @@ const Calculator = () => {
   };
 
   const handleClose = () => {
-    (document.getElementById("my_modal_1") as HTMLDialogElement)?.close();
+    setShow(false);
   };
 
   return (
-    <dialog id="my_modal_1" className="modal">
+    <dialog id="my_modal_1" className="modal" ref={dialogRef}>
       <div className="modal-box bg-background w-full max-w-[95vw] sm:max-w-[85vw] md:max-w-[75vw] lg:max-w-[100vw] min-h-screen py-12 sm:py-16 md:py-20 flex justify-center">
         <div className="w-full px-4 sm:px-6">
           <h3 className="text-sm sm:text-md font-medium">
