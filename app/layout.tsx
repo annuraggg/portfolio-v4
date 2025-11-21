@@ -3,6 +3,9 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
+import LogRocket from "logrocket";
+import ReactLenis from "lenis/react";
+import Scripts from "./Scripts";
 
 // Fallback to system fonts
 const geistSans = {
@@ -50,6 +53,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  LogRocket.init(process.env.NEXT_PUBLIC_LOGROCKET_ID as string);
+  LogRocket.identify(
+    Math.random().toString(36).substring(2) + Date.now().toString(36)
+  );
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -61,9 +69,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ReactLenis root>{children}</ReactLenis>
           <Toaster position="bottom-right" />
         </ThemeProvider>
+        <Scripts />
       </body>
     </html>
   );
