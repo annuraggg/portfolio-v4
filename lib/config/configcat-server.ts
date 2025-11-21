@@ -21,8 +21,6 @@ function getConfigCatClient() {
   return configCatClient;
 }
 
-export { configCatClient };
-
 export async function getFeatureFlag(key: string, defaultValue: SettingValue) {
   try {
     const client = getConfigCatClient();
