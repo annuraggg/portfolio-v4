@@ -6,6 +6,8 @@ import { Toaster } from "sonner";
 import LogRocket from "logrocket";
 import ReactLenis from "lenis/react";
 import Scripts from "./Scripts";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 // Fallback to system fonts
 const geistSans = {
@@ -71,6 +73,8 @@ export default function RootLayout({
         >
           <ReactLenis root>{children}</ReactLenis>
           <Toaster position="bottom-right" />
+          <SpeedInsights />
+          <Analytics />
         </ThemeProvider>
         <Scripts />
       </body>
