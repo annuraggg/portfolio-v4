@@ -126,6 +126,7 @@ const Navbar = () => {
             width={100}
             height={100}
             alt="Logo"
+            priority
             className="ml-0 sm:ml-5 w-16 sm:w-20 md:w-24 h-auto dark:invert-0 invert cursor-pointer"
             onClick={handleClick}
           />
