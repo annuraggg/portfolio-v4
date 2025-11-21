@@ -2,7 +2,7 @@
 import { Project } from "@/lib/db/projects";
 import { useInView } from "motion/react";
 import React, { useRef } from "react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 interface Props {
   project: Project;

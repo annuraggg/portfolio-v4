@@ -1,8 +1,10 @@
 import Hero from "./home/Hero";
-import About from "./home/About";
-import Estimate from "./home/Estimate";
-import FAQ from "./home/FAQ";
-import Skills from "./home/Skills";
+import dynamic from "next/dynamic";
+
+const About = dynamic(() => import("./home/About"));
+const Estimate = dynamic(() => import("./home/Estimate"));
+const FAQ = dynamic(() => import("./home/FAQ"));
+const Skills = dynamic(() => import("./home/Skills"));
 
 export default function Home() {
   return (

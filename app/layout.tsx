@@ -14,23 +14,7 @@ const geistMono = {
 };
 
 const zonoPro = localFont({
-  // src: "../assets/fonts/ZonaPro-Bold.otf",
   src: [
-    {
-      path: "../assets/fonts/zonapro/zonapro-hairline.ttf",
-      weight: "100",
-      style: "hairline",
-    },
-    {
-      path: "../assets/fonts/zonapro/zonapro-thin.ttf",
-      weight: "200",
-      style: "thin",
-    },
-    {
-      path: "../assets/fonts/zonapro/zonapro-light.ttf",
-      weight: "300",
-      style: "light",
-    },
     {
       path: "../assets/fonts/zonapro/zonapro-regular.ttf",
       weight: "400",
@@ -39,30 +23,21 @@ const zonoPro = localFont({
     {
       path: "../assets/fonts/zonapro/zonapro-semibold.ttf",
       weight: "500",
-      style: "semibold",
+      style: "normal",
     },
     {
       path: "../assets/fonts/zonapro/zonapro-bold.ttf",
       weight: "600",
-      style: "bold",
+      style: "normal",
     },
     {
       path: "../assets/fonts/zonapro/zonapro-extrabold.ttf",
       weight: "700",
-      style: "extrabold",
-    },
-    {
-      path: "../assets/fonts/zonapro/zonapro-black.ttf",
-      weight: "800",
-      style: "black",
-    },
-    {
-      path: "../assets/fonts/zonapro/zonapro-ultra.ttf",
-      weight: "900",
-      style: "ultra",
+      style: "normal",
     },
   ],
   variable: "--font-zona-pro",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
