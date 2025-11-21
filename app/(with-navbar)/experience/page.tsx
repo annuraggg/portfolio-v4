@@ -6,7 +6,7 @@ import {
   getAllExperience,
   type Experience as ExperienceType,
 } from "@/lib/db/experience";
-import { configCatClient } from "@/lib/config/configcat-server";
+import { getFeatureFlag } from "@/lib/config/configcat-server";
 
 async function fetchCredentials(): Promise<Credential[] | Error> {
   try {
@@ -31,10 +31,7 @@ async function fetchExperience(): Promise<ExperienceType[] | Error> {
 export const dynamic = "force-dynamic";
 
 export default async function ExperiencePage() {
-  const isFeatureEnabled = await configCatClient.getValueAsync(
-    "enableexperience",
-    true
-  );
+  const isFeatureEnabled = await getFeatureFlag("enableexperience", true);
 
   if (!isFeatureEnabled) {
     return (

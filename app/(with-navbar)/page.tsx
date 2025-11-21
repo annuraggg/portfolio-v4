@@ -1,17 +1,28 @@
 import Hero from "./home/Hero";
-import About from "./home/About";
-import Estimate from "./home/Estimate";
-import FAQ from "./home/FAQ";
-import Skills from "./home/Skills";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+
+const About = dynamic(() => import("./home/About"));
+const Estimate = dynamic(() => import("./home/Estimate"));
+const FAQ = dynamic(() => import("./home/FAQ"));
+const Skills = dynamic(() => import("./home/Skills"));
 
 export default function Home() {
   return (
     <main>
       <Hero />
-      <About />
-      <Skills />
-      <Estimate />
-      <FAQ />
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <About />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <Skills />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <Estimate />
+      </Suspense>
+      <Suspense fallback={<div className="min-h-[400px]" />}>
+        <FAQ />
+      </Suspense>
     </main>
   );
 }

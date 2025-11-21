@@ -1,15 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { getFeatureFlag } from "@/lib/config/configcat-server";
 
 export default function MouseFollower() {
   const dotRef = useRef<HTMLDivElement>(null);
   const pos = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
   const [hidden, setHidden] = useState(false);
-  const isFeatureEnabled = getFeatureFlag("enablemousefollower", true);
 
   useEffect(() => {
-    if (!isFeatureEnabled) return;
 
     const handleMouseMove = (e: MouseEvent) => {
       pos.current.targetX = e.clientX;
@@ -53,11 +50,7 @@ export default function MouseFollower() {
       window.removeEventListener("mouseout", handleMouseOut);
       cancelAnimationFrame(frame);
     };
-  }, [isFeatureEnabled]);
-
-  if (!isFeatureEnabled) {
-    return null;
-  }
+  }, []);
 
   return (
     <div

@@ -5,8 +5,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 import { ExternalLink, Menu, X } from "lucide-react";
 import { getAssetUrl } from "@/lib/utils/assets";
-import confetti from "canvas-confetti";
-import { getFeatureFlag } from "@/lib/config/configcat-server";
 
 const Navbar = () => {
   const SCROLL_THRESHOLD = 100;
@@ -17,8 +15,9 @@ const Navbar = () => {
   const borderTimer = useRef<NodeJS.Timeout | null>(null);
   const textTimer = useRef<NodeJS.Timeout | null>(null);
 
-  const handleClick = () => {
-    const end = Date.now() + 3 * 1000; // 3 seconds
+  const handleClick = async () => {
+    const confetti = (await import("canvas-confetti")).default;
+    const end = Date.now() + 3 * 1000;
     const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
     const frame = () => {
       if (Date.now() > end) return;
@@ -43,20 +42,17 @@ const Navbar = () => {
     frame();
   };
 
-  const isExperienceEnabled = getFeatureFlag("enableexperience", true);
-  const isProjectsEnabled = getFeatureFlag("enableprojects", true);
-
   const navItems = [
     { name: "Home", path: "/", enabled: true },
     {
       name: "Projects",
       path: "/projects",
-      enabled: isProjectsEnabled,
+      enabled: true,
     },
     {
       name: "Experience",
       path: "/experience",
-      enabled: isExperienceEnabled,
+      enabled: true,
     },
     { name: "Contact", path: "/contact", enabled: true },
     {
@@ -130,6 +126,7 @@ const Navbar = () => {
             width={100}
             height={100}
             alt="Logo"
+            priority
             className="ml-0 sm:ml-5 w-16 sm:w-20 md:w-24 h-auto dark:invert-0 invert cursor-pointer"
             onClick={handleClick}
           />

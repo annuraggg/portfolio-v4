@@ -1,10 +1,23 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { LightRays } from "@/components/ui/light-rays";
 import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
-import Calculator from "./Calculator";
+
+const Calculator = dynamic(() => import("./Calculator"), {
+  ssr: false,
+});
 
 const Estimate = () => {
+  const [showCalculator, setShowCalculator] = useState(false);
+
+  useEffect(() => {
+    if (showCalculator) {
+      const modal = document.getElementById("my_modal_1") as HTMLDialogElement | null;
+      modal?.showModal();
+    }
+  }, [showCalculator]);
+
   return (
     <div className="relative h-[400px] sm:h-[500px]  overflow-hidden rounded-lg border mx-4 sm:mx-6 md:mx-8 max-w-screen">
       <div className="relative z-10 flex h-full flex-col items-center justify-center gap-4 px-4 sm:px-6 text-center">
@@ -17,11 +30,7 @@ const Estimate = () => {
         </p>
         <InteractiveHoverButton
           className="mt-4 sm:mt-7"
-          onClick={() =>
-            (
-              document.getElementById("my_modal_1") as HTMLDialogElement | null
-            )?.showModal()
-          }
+          onClick={() => setShowCalculator(true)}
         >
           {" "}
           Start Calculator
@@ -29,7 +38,7 @@ const Estimate = () => {
       </div>
 
       <LightRays />
-      <Calculator />
+      {showCalculator && <Calculator />}
     </div>
   );
 };
