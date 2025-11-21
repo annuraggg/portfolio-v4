@@ -6,6 +6,7 @@ import { AnimatedThemeToggler } from "./ui/animated-theme-toggler";
 import { ExternalLink, Menu, X } from "lucide-react";
 import { getAssetUrl } from "@/lib/utils/assets";
 import { RouteProgress } from "./ui/route-progress";
+import { useNavStore } from "@/lib/stores/nav-store";
 
 const Navbar = () => {
   const SCROLL_THRESHOLD = 100;
@@ -15,6 +16,8 @@ const Navbar = () => {
 
   const borderTimer = useRef<NodeJS.Timeout | null>(null);
   const textTimer = useRef<NodeJS.Timeout | null>(null);
+
+  const setNavigating = useNavStore((state) => state.setNavigating);
 
   const handleClick = async () => {
     const confetti = (await import("canvas-confetti")).default;
@@ -115,7 +118,6 @@ const Navbar = () => {
       }`}
     >
       <RouteProgress />
-
       {/* Logo / Text */}
       <div className="relative w-32 sm:w-40 md:w-48 h-8 md:h-10">
         {/* Logo (show when !showText) */}
@@ -157,6 +159,7 @@ const Navbar = () => {
                 key={item.name}
                 href={item.path}
                 className="text-sm xl:text-md font-semibold hover:text-accent transition-colors duration-500"
+                onClick={() => setNavigating(true)}
               >
                 {item.external && (
                   <ExternalLink className="inline-block mb-1 mr-2" size={14} />
